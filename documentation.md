@@ -22,16 +22,16 @@ There are many common terms and acronyms relating to SCAP that are used througho
 ### iOS 7 Guides
 
 {:.table .table-bordered .table-striped}
-Drafts     | PDF                                                                              | HTML                                                                               | ZIP
------------|----------------------------------------------------------------------------------|------------------------------------------------------------------------------------|-------------------------------------------------------------------------------
-2014.02.05 | [PDF]({{ '/docs/ios7/drafts/20140205/ios7-guide.pdf' | prepend: site.baseurl }}) | [HTML]({{ '/docs/ios7/drafts/20140205/ios7-guide.html' | prepend: site.baseurl }}) | [ZIP]({{ '/docs/ios7/drafts/20140205/20140205.zip' | prepend: site.baseurl }})
+Drafts     | PDF                                                                                       | HTML                                                                                        | ZIP
+-----------|-------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------
+2014.02.05 | [PDF]({{ '/documentation/ios7/drafts/20140205/ios7-guide.pdf' | prepend: site.baseurl }}) | [HTML]({{ '/documentation/ios7/drafts/20140205/ios7-guide.html' | prepend: site.baseurl }}) | [ZIP]({{ '/documentation/ios7/drafts/20140205/20140205.zip' | prepend: site.baseurl }})
 
 ### iOS 6 Guides
 
 {:.table .table-bordered .table-striped}
-Drafts     | PDF                                                                              | HTML                                                                               | ZIP
------------|----------------------------------------------------------------------------------|------------------------------------------------------------------------------------|-------------------------------------------------------------------------------
-2013.12.31 | [PDF]({{ '/docs/ios6/drafts/20131231/ios6-guide.pdf' | prepend: site.baseurl }}) | [HTML]({{ '/docs/ios6/drafts/20131231/ios6-guide.html' | prepend: site.baseurl }}) | [ZIP]({{ '/docs/ios6/drafts/20131231/20131231.zip' | prepend: site.baseurl }})
+Drafts     | PDF                                                                                       | HTML                                                                                        | ZIP
+-----------|-------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------
+2013.12.31 | [PDF]({{ '/documentation/ios6/drafts/20131231/ios6-guide.pdf' | prepend: site.baseurl }}) | [HTML]({{ '/documentation/ios6/drafts/20131231/ios6-guide.html' | prepend: site.baseurl }}) | [ZIP]({{ '/documentation/ios6/drafts/20131231/20131231.zip' | prepend: site.baseurl }})
 
 
 ## External SCAP Related Links
