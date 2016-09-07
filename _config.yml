@@ -1,0 +1,24 @@
+baseurl: ""
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      permalink: "/post/:title/"
+excerpt_separator: <!--more-->
+exclude:
+  - .gitignore
+    downloads.md
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+gems:
+  - jekyll-feed
+  - jekyll-redirect-from
+permalink: pretty
+title: "SCAP on Apple"
+url: "https://scaponapple.github.io"

@@ -1,0 +1,23 @@
+{% assign page_url_parts = page.url | split: '/' %}
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{ '/' | prepend: site.baseurl }}">{{ site.title | escape }}</a>
+    </div>
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav">
+        <li{% if page_url_parts[1] == 'news' or page_url_parts[1] == 'post' %} class="active"{% endif %}><a href="{{ '/news/' | prepend: site.baseurl }}">News</a></li>
+        <li{% if page_url_parts[1] == 'documentation' %} class="active"{% endif %}><a href="{{ '/documentation/' | prepend: site.baseurl }}">Documentation</a></li>
+        <li{% if page_url_parts[1] == 'contribute' %} class="active"{% endif %}><a href="{{ '/contribute/' | prepend: site.baseurl }}">Contribute</a></li>
+        <li{% if page_url_parts[1] == 'mailing-lists' %} class="active"{% endif %}><a href="{{ '/mailing-lists/' | prepend: site.baseurl }}">Mailing Lists</a></li>
+        <li><a href="{{ site.github.repository_url }}">Development</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>

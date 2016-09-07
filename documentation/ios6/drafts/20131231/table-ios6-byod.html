@@ -1,0 +1,325 @@
+<html xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cdf="http://checklists.nist.gov/xccdf/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Profile for iOS Devices in BYOD Scenarios</title>
+</head>
+<body>
+<br><br><div style="text-align: center; font-size: x-large; font-weight:bold">Profile for iOS Devices in BYOD Scenarios</div>
+<br><div style="text-align: center; font-size: large; font-style:italic">This profile is designed for iOS devices in BYOD scenarios.</div>
+<br><style type="text/css">
+		table
+		{
+			border-collapse:collapse;
+		}
+		table, th, td
+		{
+			border: 2px solid #dcdcdc;
+			border-left: none;
+			border-right: none;
+			vertical-align: top;
+			padding: 2px;
+			font-family: verdana,arial,sans-serif;
+			font-size:11px;
+		}
+		table tr:nth-child(2n+2) { background-color: #f4f4f4; }
+		thead
+		{
+			display: table-header-group;
+			font-weight: bold;
+			background-color: #dedede;
+		}
+	</style>
+<table>
+<thead>
+<td>CCE ID</td>
+<td>Rule Title</td>
+<td>Description</td>
+<td>Rationale</td>
+<td>Variable Setting</td>
+<td>NIST 800-53 Mapping</td>
+</thead>
+<tr>
+<td></td>
+<td>Disable Simple Value for Passcode</td>
+<td> Set <b>Allow simple value</b> to <b>Unchecked</b>. </td>
+<td>Disabling the use of simple values for a passcode enables display
+of the entire keyboard for passcode entry, instead of only a numeric keypad.
+</td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>Require Alphanumeric Value for Passcode</td>
+<td> Set <b>Require alphanumeric value</b> to <b>Checked</b>. </td>
+<td> Requiring alphanumeric values should increase the search space in a
+password-guessing attack. </td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>Set Minimum Passcode Length</td>
+<td> Set <b>Minimum passcode length</b> to a value. </td>
+<td> Setting a minimum length should increase the search space in a
+password-guessing attack. A passcode length between 4 and 6 may be a reasonable balance
+between user experience and security for many deployment scenarios.
+</td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>Set Minimum Number of Complex Characters</td>
+<td> Set <b>Minimum number of complex characters</b> to a value.
+</td>
+<td> Requiring complex characters should increase the search space in a
+password-guessing attack. </td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>Set Maximum Passcode Age</td>
+<td> Set <b>Maximum passcode age</b> to a number of a days, if there is a need
+for such rotation. </td>
+<td> Changing passcodes prevents an attacker who has
+compromised the password from re-using it to regain access. This is an unlikely
+scenario, but is addressed by setting a password expiration. A value of 120 days is
+likely to be adequate for many deployment scenarios.</td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>Set Auto-Lock Time</td>
+<td> Set <b>Auto-Lock (in minutes)</b> to a number of minutes.
+A value of 5 minutes may be a reasonable balance
+between user experience and security for many deployment scenarios.
+</td>
+<td>Automatically locking the device after a period of inactivity
+ensures that the device will require passcode entry if lost or left unattended. 
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Set Grace Period for Device Lock</td>
+<td> Set <b>Grace period for device lock</b> to 5 minutes, or less.
+</td>
+<td> This permits unlock of the device after a certain period of time
+has passed since the last device lock. Allowing a Grace Period enhances
+usability and makes users more likely to tolerate passcode requirements.
+</td>
+<td></td>
+<td>IA-11<br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>Disable Screen Capture</td>
+<td> Disable <b>Allow screen capture</b>, if concerns exist about
+storing screen contents in the Photo Library. </td>
+<td> While unlikely, this feature could accidentally be triggered (by
+simultaneously pressing the Home and Sleep buttons) and lead to storage of
+sensitive information outside the intended storage area.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Disable Safari Autofill</td>
+<td> Deselect <b>Enable autofill</b>, to prevent storage of
+some potentially sensitive information by Safari. </td>
+<td>Storage of autofill information permits an attacker to harvest
+previously-used credentials in the event that the device becomes
+compromised.
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable Safari Fraud Warning</td>
+<td> Select <b>Force fraud warning</b>, to ensure users are
+warned when visiting known-fraudulent web sites. </td>
+<td>Fraudulent web sites may try to collect sensitive information
+from users.
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable Safari Pop-up Blocking</td>
+<td> Set <b>Block pop-ups</b> to <b>Checked</b>. </td>
+<td>Blocking pop-ups prevents malicious or obnoxious web sites from
+interfering with the user in an unexpected and possibly security-relevant
+manner.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Accept Cookies from Visited Sites Only</td>
+<td> Set <b>Accept cookies</b> to <b>From visited sites</b>.</td>
+<td>Accepting cookies from only visited sites decreases the extent
+to which third-party web sites can track user activity.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Disable User Acceptance of Untrusted TLS Certificates</td>
+<td> Set <b>Allow user to accept untrusted TLS certificates</b> to
+Unchecked.  Root CAs trusted by iOS are available at
+<b>http://support.apple.com/kb/HT5012</b>.
+</td>
+<td>Presentation of an untrusted TLS certificate to client software
+could indicate a man-in-the-middle attack.  
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Force Encrypted Backups</td>
+<td> Set <b>Force encrypted backups</b> to Checked, in order
+to ensure that the contents of iOS devices are encrypted when backed up
+onto host computers.
+</td>
+<td>Encrypting device backups protects hosts backups even if the host
+later becomes compromised.  </td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Prevent Moving Messages between Mail Accounts</td>
+<td> Disable <b>Allow Move</b> for all email accounts. </td>
+<td>Moving mail directly between accounts could permit the movement of
+enterprise information to personal email accounts.  While this is possible
+simply through email forwarding, in that case the enterprise email server (when
+used as the MTA) has at least the possibility of logging such transfers.
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable SSL for Mail Connections</td>
+<td> Ensure <b>Use SSL</b> is enabled for all incoming and outgoing
+email accounts.</td>
+<td>SSL provides authentication of the mail server to
+which the mail client connects, and also encrypts traffic between the mail
+server and the email client.
+</td>
+<td></td>
+<td>SI-7(6)<br>SC-8<br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>Enable S/MIME Support for Mail if Needed</td>
+<td> Set <b>Enable S/MIME</b> to <b>Checked</b>, to provide encrypted and
+authenticated email support. Ensure that transmission of
+configuration profiles to devices is encrypted and authenticated if S/MIME
+certificates containing private keys are embedded. The iOS device can also be
+configured to use an SCEP server to retrieve S/MIME certificates for use with
+Mail.</td>
+<td>S/MIME provides the capability for users to send and receive S/MIME
+email messages from wireless email devices. S/MIME and digital signatures
+provide assurance the message is authentic. Without S/MIME users will not be
+able to read encrypted email and will not be able to encrypt email with
+sensitive information.
+</td>
+<td></td>
+<td>SI-7(6)<br>SC-8<br>
+</td>
+</tr>
+<tr>
+<td></td>
+<td>Prevent moving messages between ActiveSync accounts</td>
+<td> Disable <b>Allow Move</b> for all Exchange ActiveSync accounts.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable SSL for ActiveSync Communications</td>
+<td> Ensure <b>Use SSL</b> is <b>Checked</b> for all Exchange ActiveSync
+accounts. </td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable S/MIME Support for ActiveSync if Needed</td>
+<td> Set <b>Enable S/MIME</b> to <b>Checked</b>, if encrypted and
+authenticated email support is needed. Ensure that transmission of
+configuration profiles to devices is encrypted and authenticated if S/MIME
+certificates containing private keys are embedded. The iOS device can also be
+configured to use an SCEP server to retrieve S/MIME certificates for use with
+Mail. </td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable SSL for LDAP Connections</td>
+<td> Ensure <b>Use SSL</b> is enabled if using an LDAP service.
+</td>
+<td>SSL provides authentication of the LDAP server to
+which the system connects, and also encrypts traffic between the iOS device
+and the LDAP server.
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable SSL for CalDav Connections</td>
+<td> Ensure <b>Use SSL</b> is enabled if using a CalDav service.
+</td>
+<td>SSL provides authentication of the CalDav server to
+which the iOS device connects, and also encrypts traffic between the CalDav
+server and the iOS device.
+</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable SSL for Subscribed Calendar Connections</td>
+<td> Ensure <b>Use SSL</b> is enabled if connecting to calendar
+subscriptions.</td>
+<td>SSL provides authentication of servers that provide calender
+subscriptions, and also encrypts traffic between the calendar subscription
+server and the iOS device.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>Enable SSL for CardDav Connections</td>
+<td> Enable <b>Use SSL</b> if using a CardDav service. </td>
+<td>SSL provides authentication of the CardDav server to
+which the iOS device connects, and also encrypts traffic between the CardDav
+server and the email client.
+</td>
+<td></td>
+<td></td>
+</tr>
+</table>
+</body>
+</html>

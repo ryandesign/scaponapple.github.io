@@ -1,0 +1,641 @@
+<html xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cdf="http://checklists.nist.gov/xccdf/1.1" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Profile for Enterprise-Controlled iOS Devices</title>
+</head>
+<body>
+<br><br><div style="text-align: center; font-size: x-large; font-weight:bold">Profile for Enterprise-Controlled iOS Devices</div>
+<br><div style="text-align: center; font-size: large; font-style:italic">This profile is designed for enterprise-controlled iOS devices.</div>
+<br><style type="text/css">
+		table
+		{
+			border-collapse:collapse;
+		}
+		table, th, td
+		{
+			border: 2px solid #dcdcdc;
+			border-left: none;
+			border-right: none;
+			vertical-align: top;
+			padding: 2px;
+			font-family: verdana,arial,sans-serif;
+			font-size:11px;
+		}
+		table tr:nth-child(2n+2) { background-color: #f4f4f4; }
+		thead
+		{
+			display: table-header-group;
+			font-weight: bold;
+			background-color: #dedede;
+		}
+	</style>
+<table>
+<thead>
+<td>CCE ID</td>
+<td>Rule Title</td>
+<td>Description</td>
+<td>Rationale</td>
+<td>Variable Setting</td>
+<td>NIST 800-53 Mapping</td>
+<td>DISA CCI</td>
+</thead>
+<tr>
+<td>CCE-28800</td>
+<td>Disable Simple Value for Passcode</td>
+<td> Set <b>Allow simple value</b> to <b>Unchecked</b>. </td>
+<td>Disabling the use of simple values for a passcode enables display
+of the entire keyboard for passcode entry, instead of only a numeric keypad.
+</td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+<td>186<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28801</td>
+<td>Require Alphanumeric Value for Passcode</td>
+<td> Set <b>Require alphanumeric value</b> to <b>Checked</b>. </td>
+<td> Requiring alphanumeric values should increase the search space in a
+password-guessing attack. </td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+<td>186<br>193<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28802</td>
+<td>Set Minimum Passcode Length</td>
+<td> Set <b>Minimum passcode length</b> to a value. </td>
+<td> Setting a minimum length should increase the search space in a
+password-guessing attack. A passcode length between 4 and 6 may be a reasonable balance
+between user experience and security for many deployment scenarios.
+</td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+<td>186<br>205<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28803</td>
+<td>Set Minimum Number of Complex Characters</td>
+<td> Set <b>Minimum number of complex characters</b> to a value.
+</td>
+<td> Requiring complex characters should increase the search space in a
+password-guessing attack. </td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+<td>186<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28804</td>
+<td>Set Maximum Passcode Age</td>
+<td> Set <b>Maximum passcode age</b> to a number of a days, if there is a need for such rotation. </td>
+<td> Changing passcodes prevents an attacker who has compromised the password from re-using it to regain access. This is an unlikely
+scenario, but is addressed by setting a password expiration. A value of 120 days is likely to be adequate for many deployment scenarios.</td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+<td>199<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28805</td>
+<td>Set Auto-Lock Time</td>
+<td> Set <b>Auto-Lock (in minutes)</b> to a number of minutes.
+A value of 5 minutes may be a reasonable balance
+between user experience and security for many deployment scenarios.
+</td>
+<td>Automatically locking the device after a period of inactivity
+ensures that the device will require passcode entry if lost or left unattended. 
+</td>
+<td></td>
+<td></td>
+<td>57<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28806</td>
+<td>Set Passcode History</td>
+<td> Set <b>Passcode History</b> to <b>3</b>. </td>
+<td>Setting a passcode history ensures that users cannot trivially
+alternate between passcodes.</td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+<td>200<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28807</td>
+<td>Set Grace Period for Device Lock</td>
+<td> Set <b>Grace period for device lock</b> to 5 minutes, or less.
+</td>
+<td> This permits unlock of the device after a certain period of time
+has passed since the last device lock. Allowing a Grace Period enhances
+usability and makes users more likely to tolerate passcode requirements.
+</td>
+<td></td>
+<td>IA-11<br>
+</td>
+<td>57<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28808</td>
+<td>Set Maximum Number of Failed Attempts</td>
+<td> Set <b>Maximum number of failed attempts</b> to 10 attempts, or
+fewer. </td>
+<td> Setting the device to automatically erase after a number of failed
+attempts can protect against witless password guessing attacks conducted
+through the unlock screen. 
+</td>
+<td></td>
+<td>IA-5(1)<br>
+</td>
+<td>1383<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28809</td>
+<td>Disable Installation of Third-Party Apps</td>
+<td> Unless necessary, disable <b>Allow installing apps</b>. This is
+unusual for a general-purpose device. </td>
+<td> While iOS includes features such as sandboxing that are designed to
+prevent third-party apps from influencing the integrity of the operating
+system, they do have the ability to access data stored on the device such as
+Address Book, Location Data, or the Photo Library, and have the
+ability to transmit this information. </td>
+<td></td>
+<td>CM-11(2)<br>
+</td>
+<td>663<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28811</td>
+<td>Disable Screen Capture</td>
+<td> Disable <b>Allow screen capture</b>, if concerns exist about
+storing screen contents in the Photo Library. </td>
+<td> While unlikely, this feature could accidentally be triggered (by
+simultaneously pressing the Home and Sleep buttons) and lead to storage of
+sensitive information outside the intended storage area.</td>
+<td></td>
+<td></td>
+<td>1150<br>
+</td>
+</tr>
+<tr>
+<td>CCE-28814</td>
+<td>Disable Safari Autofill</td>
+<td> Deselect <b>Enable autofill</b>, to prevent storage of
+some potentially sensitive information by Safari. </td>
+<td>Storage of autofill information permits an attacker to harvest
+previously-used credentials in the event that the device becomes
+compromised.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28815</td>
+<td>Enable Safari Fraud Warning</td>
+<td> Select <b>Force fraud warning</b>, to ensure users are
+warned when visiting known-fraudulent web sites. </td>
+<td>Fraudulent web sites may try to collect sensitive information
+from users.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28817</td>
+<td>Enable Safari Pop-up Blocking</td>
+<td> Set <b>Block pop-ups</b> to <b>Checked</b>. </td>
+<td>Blocking pop-ups prevents malicious or obnoxious web sites from
+interfering with the user in an unexpected and possibly security-relevant
+manner.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28818</td>
+<td>Accept Cookies from Visited Sites Only</td>
+<td> Set <b>Accept cookies</b> to <b>From visited sites</b>.</td>
+<td>Accepting cookies from only visited sites decreases the extent
+to which third-party web sites can track user activity.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28819</td>
+<td>Disable iCloud Backups</td>
+<td>Set <b>Allow backup</b> to <b>Unchecked</b>. </td>
+<td>Backing up iOS devices to iCloud may involve placing enterprise data
+on systems that are not controlled by the enterprise.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28820</td>
+<td>Disable iCloud Document Sync</td>
+<td>Set <b>Allow document sync</b> to <b>Unchecked</b>.</td>
+<td>Synchronizing documents to iCloud involves placing data on systems
+that are not controlled by the enterprise.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28821</td>
+<td>Disable iCloud Photo Stream</td>
+<td>Set <b>Allow Photo Stream</b> to <b>Unchecked</b>.</td>
+<td>If photographs may constitute sensitive enterprise data, then
+transferring photos to iCloud could involve placing such data on systems that
+are not controlled by the enterprise.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28822</td>
+<td>Disable Sending Diagnostic Data to Apple</td>
+<td> Disable <b>Allow diagnositic data to be sent to Apple</b> to
+Unchecked, if this presents concerns about inadvertent transmission of
+sensitive data.</td>
+<td>Diagnostic data could be considered sensitive in some environments
+and not transmitted outside enterprise control.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28823</td>
+<td>Disable User Acceptance of Untrusted TLS Certificates</td>
+<td> Set <b>Allow user to accept untrusted TLS certificates</b> to
+Unchecked.  Root CAs trusted by iOS are available at
+<b>http://support.apple.com/kb/HT5012</b>.
+</td>
+<td>Presentation of an untrusted TLS certificate to client software
+could indicate a man-in-the-middle attack.  
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28824</td>
+<td>Force Encrypted Backups</td>
+<td> Set <b>Force encrypted backups</b> to Checked, in order
+to ensure that the contents of iOS devices are encrypted when backed up
+onto host computers.
+</td>
+<td>Encrypting device backups protects hosts backups even if the host
+later becomes compromised.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28825</td>
+<td>Disable Auto-Join for Wi-Fi</td>
+<td>Ensure that <b>Auto Join</b> is disabled for WiFi networks.
+</td>
+<td> Disabling auto join ensures that users are aware of when
+connections to WiFi networks are being made.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28829</td>
+<td>Prevent Moving Messages between Mail Accounts</td>
+<td> Disable <b>Allow Move</b> for all email accounts. </td>
+<td>Moving mail directly between accounts could permit the movement of
+enterprise information to personal email accounts.  While this is possible
+simply through email forwarding, in that case the enterprise email server (when
+used as the MTA) has at least the possibility of logging such transfers.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28831</td>
+<td>Enable SSL for Mail Connections</td>
+<td> Ensure <b>Use SSL</b> is enabled for all incoming and outgoing
+email accounts.</td>
+<td>SSL provides authentication of the mail server to
+which the mail client connects, and also encrypts traffic between the mail
+server and the email client.
+</td>
+<td></td>
+<td>SI-7(6)<br>SC-8<br>
+</td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28830</td>
+<td>Enable S/MIME Support for Mail if Needed</td>
+<td> Set <b>Enable S/MIME</b> to <b>Checked</b>, to provide encrypted and
+authenticated email support. Ensure that transmission of
+configuration profiles to devices is encrypted and authenticated if S/MIME
+certificates containing private keys are embedded. The iOS device can also be
+configured to use an SCEP server to retrieve S/MIME certificates for use with
+Mail.</td>
+<td>S/MIME provides the capability for users to send and receive S/MIME
+email messages from wireless email devices. S/MIME and digital signatures
+provide assurance the message is authentic. Without S/MIME users will not be
+able to read encrypted email and will not be able to encrypt email with
+sensitive information.
+</td>
+<td></td>
+<td>SI-7(6)<br>SC-8<br>
+</td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28832</td>
+<td>Prevent moving messages between ActiveSync accounts</td>
+<td> Disable <b>Allow Move</b> for all Exchange ActiveSync accounts.
+</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28834</td>
+<td>Enable SSL for ActiveSync Communications</td>
+<td> Ensure <b>Use SSL</b> is <b>Checked</b> for all Exchange ActiveSync
+accounts. </td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28835</td>
+<td>Enable S/MIME Support for ActiveSync if Needed</td>
+<td> Set <b>Enable S/MIME</b> to <b>Checked</b>, if encrypted and
+authenticated email support is needed. Ensure that transmission of
+configuration profiles to devices is encrypted and authenticated if S/MIME
+certificates containing private keys are embedded. The iOS device can also be
+configured to use an SCEP server to retrieve S/MIME certificates for use with
+Mail. </td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28836</td>
+<td>Enable SSL for LDAP Connections</td>
+<td> Ensure <b>Use SSL</b> is enabled if using an LDAP service.
+</td>
+<td>SSL provides authentication of the LDAP server to
+which the system connects, and also encrypts traffic between the iOS device
+and the LDAP server.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28837</td>
+<td>Enable SSL for CalDAV Connections</td>
+<td> Ensure <b>Use SSL</b> is enabled if using a CalDAV service.
+</td>
+<td>SSL provides authentication of the CalDAV server to
+which the iOS device connects, and also encrypts traffic between the CalDAV
+server and the iOS device.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28838</td>
+<td>Enable SSL for Subscribed Calendar Connections</td>
+<td> Ensure <b>Use SSL</b> is enabled if connecting to calendar
+subscriptions.</td>
+<td>SSL provides authentication of servers that provide calender
+subscriptions, and also encrypts traffic between the calendar subscription
+server and the iOS device.</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28839</td>
+<td>Enable SSL for CardDAV Connections</td>
+<td> Enable <b>Use SSL</b> if using a CardDAV service. </td>
+<td>SSL provides authentication of the CardDAV server to
+which the iOS device connects, and also encrypts traffic between the CardDAV
+server and the email client.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28841</td>
+<td>Sign Messages</td>
+<td> Set <b>Sign messages</b> to Checked. </td>
+<td> This setting causes responses generated by the device (in response
+to commands from the MDM server) to be signed with the device’s identity
+certificate.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28842</td>
+<td>Check Out When Removed</td>
+<td> Set <b>Check out when removed</b> to Checked. </td>
+<td> This causes the device to send a message to the MDM server whenever
+the configuration profile is removed.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28843</td>
+<td>Allow Remote Query of General Settings</td>
+<td> In the <b>Query device for</b> section, set <b>General
+settings</b> to Checked. </td>
+<td>ALlowing an enterprise to be able to query general device settings
+such as profile names and identifiers permits the enterprise to have insight
+into the ownership of profiles installed onto the device.
+</td>
+<td></td>
+<td>CA-9<br>
+</td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28845</td>
+<td>Allow Remote Query of Network Settings</td>
+<td> In the <b>Query device for</b> section, set <b>Network
+settings</b> to Checked. </td>
+<td>Allowing an enterprise to be able to query network settings
+permits the enterprise to have insight into the device's network
+connection capabilities.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28844</td>
+<td>Allow Remote Query of Security Settings</td>
+<td> In the <b>Query device for</b> section, set <b>Security
+settings</b> to Checked. </td>
+<td>Allowing an enterprise to be able to query security settings
+permits the enterprise to have insight into the device's security posture.
+</td>
+<td></td>
+<td>CA-9<br>
+</td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28846</td>
+<td>Allow Remote Query of Restrictions</td>
+<td> In the <b>Query device for</b> section, set <b>Restriction</b> to
+Checked. </td>
+<td>Allowing an enterprise to be able to query restrictions
+enforced on the device permits the enterprise to have insight into
+whether certain device behavior is configured, such as encrypted
+backups.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28847</td>
+<td>Allow Remote Query of Configuration Profiles</td>
+<td> In the <b>Query device for</b> section, set <b>Configuration
+Profiles</b> to Checked. </td>
+<td>Allowing an enterprise to be able to query installed configuration
+profiles permits the enterprise to understand the overall composed configuration
+applied to the device.
+</td>
+<td></td>
+<td>CA-9<br>
+</td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28849</td>
+<td>Allow Remote Query of Provisioning Profiles</td>
+<td> In the <b>Query device for</b> section, set <b>Provisioning
+Profiles</b> to Checked. </td>
+<td>Allowing an enterprise to be able to query installed provisioning
+profiles permits the enterprise to be aware of expiry dates
+for these.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28848</td>
+<td>Allow Remote Query of Applications</td>
+<td> In the <b>Query device for</b> section, set <b>Applications</b>
+to Checked. </td>
+<td>Allowing an enterprise to query installed applications 
+provides insight into the device's software inventory, which is valuable
+in incident response.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28850</td>
+<td>Allow Remote Addition/Removal of Configuration Profiles</td>
+<td> In the <b>Add / Remove</b> section, set <b>Configuration
+Profiles</b> to Checked. </td>
+<td> Allowing an enterprise to add or remove configuration profiles
+permits an enterprise MDM server to be able to update these profiles remotely.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28851</td>
+<td>Allow Remote Addition/Removal of Provisioning Profiles</td>
+<td> In the <b>Add / Remove</b> section, set <b>Provisioning
+Profiles</b> to Checked. </td>
+<td> Allowing an enterprise to add or remove provisioning profiles
+permits an enterprise MDM server to be able to update these profiles remotely.
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28854</td>
+<td>Allow or Disallow Remote Change of Device Password</td>
+<td> In the <b>Security</b> section, set <b>Change device password</b>
+to Unchecked or Checked. This entails a risk decision, though Checked is likely
+to be appropriate for most scenarios. </td>
+<td> Most enterprises are likely well-served by permitting the MDM
+administrator to remotely send a change password command, in order to allow
+users with forgotten passcodes to maintain access to their devices. This would
+also permit an enterprise with appropriate authority, and which needed to
+overcome the Data Protection feature (such as for forensics purposes) the
+ability to do so.
+<br>
+<br>
+At the same time, an attacker who has compromised communications between the
+device and its MDM server (or the MDM server itself), could maliciously send a
+password-change command to defeat the data-at-rest protection on the devices.
+This would depend upon an attacker’s physical compromise of the device as well
+as compromise of TLS communications (or the MDM server itself).
+</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CCE-28855</td>
+<td>Allow Remote Wipe</td>
+<td> Set <b>Remote wipe</b> to Checked. </td>
+<td>Permitting remote wipe allows the enterprise to remotely wipe an iOS
+device in the event that it is lost or stolen.
+<br>
+<br>
+Note also that a layered configuration profile approach which involves specific
+configuration profiles permitting access to specific services (which can be
+removed by an MDM server), effectively permits selective removal of access to
+services (and their local data). This can provide a form of remote wipe that is
+more appropriate with BYOD scenarios that are incompatible with IT staff wiping
+entire devices.
+</td>
+<td></td>
+<td></td>
+<td>366<br>
+</td>
+</tr>
+</table>
+</body>
+</html>

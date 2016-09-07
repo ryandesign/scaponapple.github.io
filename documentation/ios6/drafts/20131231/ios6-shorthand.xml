@@ -1,0 +1,1427 @@
+<?xml version="1.0"?>
+<Benchmark xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dc="http://purl.org/dc/elements/1.1/" id="iOS-6" xsi:schemaLocation="http://checklists.nist.gov/xccdf/1.1 xccdf-1.1.4.xsd" resolved="false" xml:lang="en-US">
+  <status date="2013-07-20">draft</status>
+  <title>Guide to the Secure Configuration of Apple iOS 6</title>
+  <description>This guide is designed to provide comprehensive discussion of
+  security-relevant configuration settings for Apple iOS 6. Providing system
+  administrators with such information enables them to securely configure
+  systems under their control in a variety of network roles. This guide also
+  provides policy makers with a comprehensive catalog of settings, from which
+  security baselines can be constructed. The XCCDF format enables granular
+  selection and adjustment of settings, and their association with OVAL and
+  OCIL content provides an automated checking capability. Transformations of
+  this document, and its associated automated checking content, are capable of
+  providing baselines that meet a diverse set of policy
+  objectives.</description>
+  <notice id="terms_of_use">Do not attempt to implement any of the settings in
+  this guide without first testing them in a non-operational environment. The
+  creators of this guidance assume no responsibility whatsoever for its use by
+  other parties, and makes no guarantees, expressed or implied, about its
+  quality, reliability, or any other characteristic.</notice>
+  <front-matter>SCAP-on-Apple Project</front-matter>
+  <version>0.5</version>
+  <Value id="conditional_clause" type="string" operator="equals">
+    <title>A conditional clause for check statements.</title>
+    <description>A conditional clause for check statements.</description>
+    <value>This is a placeholder.</value>
+  </Value>
+  <Group id="introduction">
+    <title>Introduction</title>
+    <description><b>Purpose.</b> This document provides security-related usage and configuration
+recommendations for Apple iOS devices such as the iPhone, iPad, and iPod touch.
+This document does not constitute government policy, nor is it an endorsement
+of any particular platform; its purpose is solely to provide security guidance.
+This guide may outline procedures required to implement or secure certain
+features, but it is also not a general-purpose configuration manual.
+<br/>
+<br/>
+<b>Audience.</b>  This guide is primarily intended for network/system
+administrators deploying Apple&#x2019;s iOS devices or supporting their integration
+into enterprise networks.  Some information relevant to IT decision makers and
+users of the devices is also included. Readers are assumed to possess basic
+network and system administration skills for Mac OS X or Microsoft Windows
+systems, and they should have some familiarity with Apple&#x2019;s documentation and
+user interface conventions.
+<br/>
+<br/>
+<b>Scope.</b> Apple's mobile devices, including the iPhone and iPad, are
+prominent examples of a new generation of mobile devices that combine into a
+single device the capabilities of a cellular phone, laptop computer, portable
+music player, camera, audio recorder, GPS receiver and other electronics. The
+capabilities of such devices are considerable but, as with any information
+system, also pose some security risks. Design features can seriously mitigate
+some risks, but others must be considered as part of a careful, holistic risk
+decision that also respects the capabilities enabled by such devices.
+<br/>
+<br/>
+Security guidance for mobile devices must cut across many previously discrete
+boundaries between technologies. For example, scrupulous deployment of an
+iPhone includes consideration not just the settings on the device itself, but
+those of the Wi-Fi networks to which it will connect, the VPNs through which it
+will tunnel, and the servers from which it will receive its configuration. This
+guide provides recommendations for the settings on an iOS device itself, as
+well as closely-related information for the network and configuration resources
+upon which deployment of iOS devices depends.
+</description>
+    <Group id="how_to_use_this_guide">
+      <title>How to Use This Guide</title>
+      <Group id="read_sections_completely_and_in_order">
+        <title>Read Sections Completely and in Order</title>
+        <description> Each section tends to build on information discussed in prior
+sections. Each section should be read and understood completely. Instructions
+should never be blindly applied. Relevant discussion may occur immediately
+<i>after</i> instructions for an action, so be sure to read the whole section
+before beginning implementation. Careful consideration is essential for
+deploying iOS devices in an enterprise environment where multiple supporting
+devices and software components may need to be configured properly in order to
+function. </description>
+      </Group>
+      <Group id="understand_the_purpose_of_this_guidance">
+        <title>Understand the Purpose of this Guidance</title>
+        <description> The purpose of the guidance is to provide seurity-relevant
+configuration recommendations. It does not imply the suitability or
+unsuitability of any product for any particular situation, which entails a risk
+decision. </description>
+      </Group>
+      <Group id="limitations">
+        <title>Limitations</title>
+        <description> This guide is limited in its scope to security-related issues.
+This guide does not claim to offer comprehensive configuration guidance. For
+general configuration and implementation guidance refer to other sources such
+as Apple. </description>
+      </Group>
+      <Group id="test_in_non_production_environment">
+        <title>Test in Non-Production Environment</title>
+        <description> To the extent possible, guidance should be tested in a
+non-production environment before deployment. Ensure that any test environment
+simulates the configuration in which the devices will be deployed as closely as
+possible. </description>
+      </Group>
+      <Group id="formatting_conventions">
+        <title>Formatting Conventions</title>
+        <description> Commands intended for shell execution, file paths, and
+configuration file text, are featured in a <tt>monospace font</tt>. Menu
+options and GUI elements will be set in a <b>Bold, sans-serif font</b>.
+Settings appropriate to the device itself will be typeset in-line (i.e.
+<b>Settings &gt; Airplane Mode</b>). Actionable instructions are typically
+embedded in a box. </description>
+      </Group>
+    </Group>
+    <Group id="general_principles">
+      <title>General Principles</title>
+      <description> The following general principles motivate much of the advice in
+this guide and should also influence any configuration decisions that are not
+explicitly addressed. </description>
+      <Group id="encrypt_transmitted_data_whenever_possible">
+        <title>Encrypt Transmitted Data Whenever Possible</title>
+        <description> Data transmitted over a network, whether via wire or wirelessly,
+is susceptible to passive monitoring. Whenever practical mechanisms exist for
+encrypting this data-in-transit, they should be applied. Even if data is
+expected to be transmitted only over a local network, it should still be
+encrypted if possible. Encrypting authentication data, such as passwords, is
+particularly important. iOS&#x2019;s support for SSL, WPA2, and IPsec protocols
+demonstrates its capabilities, when such features are activated, to adhere to
+this principle. </description>
+      </Group>
+      <Group id="encrypt_stored_data_whenever_possible">
+        <title>Encrypt Stored Data Whenever Possible</title>
+        <description> Data on mobile devices is particularly susceptible to compromise
+due to loss of physical control. Whenever practical solutions exist, they
+should be employed to protect this data. The Data Protection API on iOS devices
+is used by some applications, and demonstrates the devices&#x2019; capability to
+provide such protection. Drawing on applications which use this capability (and
+ensuring that internally-developed enterprise applications also use it), and
+setting an appropriately complex passcode, follow this principle.
+</description>
+      </Group>
+      <Group id="minimize_software_to_minimize_vulnerability">
+        <title>Minimize Software to Minimize Vulnerability</title>
+        <description> The easiest and simplest way to avoid the vulnerabilities in a
+particular piece of software is to avoid installing the software altogether.
+Hundreds of thousands of 3rd-party applications, or &#x201C;apps,&#x201D; written by
+thousands of different developers are available for iOS devices. These
+developers may have willfully or accidentally introduced vulnerabilities. For
+some environments, a particular app may fulfill a mission-critical need. In
+other cases an app might needlessly introduce additional risk to the system.
+Certain risk scenarios may call for minimizing apps. BYOD scenarios, on the
+other hand, generally imply the consideration and acceptance of such risks.
+</description>
+      </Group>
+      <Group id="leverage_security_features_never_disable_them">
+        <title>Leverage Security Features, Never Disable Them</title>
+        <description> Security features should be effectively used to improve a
+system&#x2019;s resistance to attacks. These features can improve a system&#x2019;s
+robustness against attack for only the cost of a little effort spent doing
+configuration. For example, iOS&#x2019;s enforcement of code signing of apps provides
+assurance of integrity both during installation and at runtime. Disabling this
+feature through the use of &#x201C;jailbreaking&#x201D; tools provided by the hacker
+community significantly decreases an iOS device&#x2019;s resistance to attack.
+</description>
+      </Group>
+      <Group id="grant_least_privilege">
+        <title>Grant Least Privilege</title>
+        <description> Grant the least privilege necessary for users to perform tasks.
+The more privileges (or capabilities) that a user has, the more opportunities
+he or she will have to enable the compromise of the system (and be a victim of
+such a compromise). For example, a configuration profile can disallow use of
+the Safari web browser and the camera. Disabling the camera prevents a
+malicious or careless user from photographing sensitive areas, while disabling
+Safari helps ensure the user is protected from any web-based attacks (albeit at
+significant loss of capability). Similarly, it is possible to restrict the
+installation of third party apps, and this may be the right balance between
+security and functionality for some environments. </description>
+      </Group>
+    </Group>
+    <Group id="risks_mitigations_and_consequences">
+      <title>Risks, Mitigations, and Consequences</title>
+      <rationale> Understanding the risks &#x2013; and available mitigations &#x2013; involved in
+the deployment of smartphone platforms such as iOS provides a background for
+certain risk decisions. An attacker who has compromised any mobile device, and
+can remotely maintain control of that device, can use this access to gather a
+great deal of information about the user of the device and his or her
+environment. As described by NIST Special Publication 800-124, the
+consequences of such attacks include: 
+<ul><li>collecting audio (&#x201C;hot-microphone&#x201D; eavesdropping)</li><li>using the cameras</li><li>geolocation of the device (and presumably the user)</li><li>collecting all data, including credentials stored on the device or accessed by it</li><li>acting as the user on any network to which the device later connects.</li></ul>
+<br/>
+<br/>
+The following table describes risks (with attack vector) along with applicable
+mitigations that are either built into the iOS platform or can be employed by
+administrators or users. The following table is provided as a summary for risk
+decision makers - and to motivate administrators to apply mitigations whenever
+practical. <i>It should not be used to draw comparisons between iOS and other
+platforms.</i>
+<br/>
+<br/>
+<table><tr><th>Risk</th><th>Mitigation</th></tr><tr><td>Data Compromise due to Lost Device (still reachable over any network interface --- cellular or WiFi) </td><td>Enabling a Passcode provides protection for Apps that leverage the Data Protection API, such as Apple's Mail app and 3rd party apps, as well as for credential storage in Keychains. Using the latest hardware currently prevents usage of public Jailbreak tools to access other data on a lost device.  Activating a remote wipe can be performed via ActiveSync, MDM, or iCloud.  Find My iPhone or other geolocation could permit the lost device to be located. </td></tr><tr><td>Data Compromise due to Lost Device (not reachable over any network interface)</td><td>Enabling a Passcode encrypts some data on the device.  Using the latest hardware currently prevents usage of public Jailbreak tools to access other data on a lost device.</td></tr><tr><td>Data Compromise due to Casual Access Attempt</td><td>Enabling a Passcode prevents a casual snoop from accessing the device. Provide user training to stress importance of physical control at all times.</td></tr><tr><td>Data Compromise via Host Computer Backup/Sync </td><td>Ensure proper hygiene and configuration of systems used for backup/sync.
+This may entail enterprise rollout of iTunes, to ensure protection of backup
+data. Train users not to connect their device to any untrusted
+computers/devices and provide additional AC outlet chargers. Encrypting iOS
+device backups in iTunes can mitigate data loss if the host computer is later
+compromised or lost. </td></tr><tr><td>Exploitation of Device via Malicious app </td><td>The Sandboxing feature prevents apps from carrying out certain malicious
+activities. The App Store's app vetting process provides accountability for
+developers, which discourages creation of malicious apps. Disabling the App
+Store, or permitting only installation of Enterprise-created Apps, further
+mitigates any threat from 3rd party app developers (at significant cost to
+capability).</td></tr><tr><td>Exploitation of Device via Malicious WiFi Network </td><td>Apply software updates. Provide user training on connecting only to trusted
+networks. Provide user training to encourage use of the VPN.  </td></tr><tr><td>Exploitation of Device via Bluetooth Communications</td><td>Apply software
+updates.  Monitor compliance with MDM software. iOS only implements a small
+subset of the available BlueTooth profiles, which decreases its likelihood to
+contain vulnerabilities that would give rise to exploitation.</td></tr><tr><td>Exploitation of Device via Cellular Network (e.g. SMS/MMS, baseband communications)</td><td>Apply software updates.  Monitor compliance with MDM software.  Provide user training to ensure awareness during travel.</td></tr><tr><td>Exploitation of Device via Malicious Email or Web Page</td><td>Apply software updates, with particular vigilance after public release of jailbreak tools. Monitor compliance with MDM software.</td></tr></table>
+</rationale>
+    </Group>
+  </Group>
+  <Group id="deployment">
+    <title>Configuration Deployment</title>
+    <description>This chapter presents information about creating and deploying
+settings to iOS devices, which are generally contained in configuration
+profiles. Configuration profiles are simply XML files that conform to Apple's
+XML DTD and the plist format. Additional information is available at
+<b>http://www.apple.com/iphone/business/it-center/</b>.</description>
+    <Group id="nature_of_configuration_profiles">
+      <title>Nature of Configuration Profiles</title>
+      <description>Understand that a user who controls an iOS device can opt to erase
+the device, which erases all data from the device including any configuration
+profiles. Understand also that users can typically append further restrictive
+settings, as well as services, onto the device, even in the presence of a
+configuration profile.  Configuration Profile settings enforcement on the iOS
+devices are cumulative indicating that they can further restrict existing
+settings when applied.
+<br/>
+<br/>
+iOS configuration profiles specify a collection of settings that can control
+some security-relevant behavior of an iOS device, but are not designed to
+provide an enterprise with total, arbitrary control over the user's device.
+<br/>
+<br/>
+A "carrot and stick" approach can be employed to avoid tempting users to remove
+a configuration profile (either directly or via device reset). Bind "carrots"
+(such as credentials needed for enterprise access) to "sticks" (such as a
+passcode policy) in a single configuration profile. Removing a configuration
+profile implies that credentials necessary for accessing enterprise services
+(such as VPN certificates or e-mail accounts) would also be lost, and thus deny
+the user such services. Also in this case, MDM software would become unable to
+query the device and the enterprise would be alerted as to the device's
+unmanaged status.</description>
+    </Group>
+    <Group id="mobile_device_management_software">
+      <title>Mobile Device Management Software</title>
+      <description> Third-party MDM products, as well as Apple&#x2019;s own OS X Server, can
+automate the deployment of configuration profiles and carry out the operational
+management of devices. Configuration profiles can also be provided via secure
+web-based services. Configuration profiles can also be created using Apple&#x2019;s
+iPhone Configuration Utility ("iPCU"), but it does not provide mechanisms for
+automated deployment or reporting. iPCU provides a convenient means of
+surveying the settings which can be deployed to devices, although there is no
+guarantee that a particular MDM product will support all settings.
+</description>
+      <Group id="select_mobile_device_management_mdm_software">
+        <title>Select Mobile Device Management (MDM) Software</title>
+        <description> Select an MDM product which uses Apple&#x2019;s MDM API, unless
+enterprise management of the devices is not needed. </description>
+        <rationale> Apple&#x2019;s MDM API provides the supported mechanism for enterprise
+device management, and various 3rd party vendors have built products upon it.
+For more information, see <b>http://www.apple.com/iphone/business/it-center/deployment-mdm.html</b>.
+</rationale>
+      </Group>
+      <Group id="understand_capabilities_of_mdm_software">
+        <title>Understand Capabilities of MDM Software</title>
+        <description> Mobile device management software may also include features that
+are not part of the supported Apple MDM API: 
+<ul><li>"Jailbreak detection&#x201D; can
+determine if a user has chosen to jailbreak his or her device, which is a
+useful feature for enterprises who monitor compliance. However, it does not
+provide high assurance that a device has not been maliciously jailbroken by a
+sophisticated attacker. The situation is analogous to &#x201C;root detection&#x201D; on
+another mobile platform. It is also analogous to the historical and difficult
+problem of rootkit detection on desktop or server operating systems. In all
+these cases, the operating system itself becomes compromised. Since it alone
+operates at the most privileged levels, there are limits to the extent to which
+any add-on software can "ask a liar if he is lying."
+<br/>
+<br/>
+The system&#x2019;s cryptographically-verified boot process, runtime enforcement of
+code signatures, app sandboxing mechanism, controlled software distribution
+model via "app stores", and rapid software update capability very strongly
+address the problem of jailbreak-based attacks by themselves. Using add-on
+software to query for signs of jailbreak may provide an additional layer of
+defense. </li><br/><br/><li>"Secure containers" can provide data-at-rest protection and data-in-transit
+protection. These are typically software libraries included by 3rd party apps,
+which then make use of their functionality instead of that provided by the
+system&#x2019;s software libraries. These "containers" (which are really just apps)
+can be useful if the system&#x2019;s capable, built-in mechanisms which already
+provide these features do not meet particular requirements. Note, however, that
+they cannot protect their contents against privileged code running on the
+device, such as would result from a sophisticated, malicious jailbreak attack
+during system operation.
+<br/>
+<br/>
+They should also <i>not be confused</i> with the Sandboxing feature of
+the iOS kernel as described in [Blazakis]. Rather, the Sandboxing feature
+strongly addresses the problem of malicious or co-opted apps trying to perform
+undesirable activities on the system (such as elevating their privileges) in
+the first place. Sandboxing constitutes a significant obstacle to attackers,
+but it does not allow apps to (rather inconceivably) protect themselves if the
+underlying operating system is compromised. App sandboxing may serve as a means
+of jailbreak detection as discussed above, in that an app which can access
+beyond its Sandbox may infer that it is running on a compromised device.
+</li></ul>
+</description>
+      </Group>
+    </Group>
+    <Group id="deploying_configuration_profiles">
+      <title>Deploying Configuration Profiles</title>
+      <description> After a configuration profile is created &#x2014; typically in an MDM console &#x2014; it must be deployed to devices. This section discusses methods available for installing a configuration profile onto an iOS device, along with their security implications.
+<br/>
+<br/>
+<i>Customizing profiles to individual users implies embedding sensitive authentication information within transmitted profiles. This introduces a need for confidentiality during transmission of such files.</i></description>
+      <Group id="deploy_over_the_air_with_encryption_and_authentication">
+        <title>Deploy Over-the-Air with Encryption and Authentication</title>
+        <description> If configuration profiles will be deployed over-the-air, ensure
+use of authentication and encryption.
+<br/>
+<br/>
+If the iPhone can authenticate a configuration profile during its installation, the <b>Settings &gt; General &gt; Profile</b> screen will display <b>Verified</b>.
+<br/>
+<br/>
+Over-the-air deployment that is authenticated and encrypted requires the
+support of enterprise infrastructure, such as directory services, an enterprise
+certificate trusted by iPhone, an SCEP server, and a web server. The server
+component of MDM products may provide some of this infrastructure.</description>
+        <rationale> Deploying configuration profiles to a device over-the-air consists
+of three major steps:
+<ul><li><i>Authentication</i> of the user, typically leveraging
+existing directory services.
+</li><li><i>Enrollment</i>, which involves the device transmitting device-specific information to the enterprise, and receiving a device certificate in return.
+</li><li><i>Installation</i> of an encrypted, authenticated configuration profile onto the device.
+</li></ul>
+Some MDM products include a server component that provides a web-based service for users to initiate this process, while others initiate the process by requiring users to download a particular MDM client app from the App Store which can facilitate the process.
+<br/>
+<br/>
+Transmission and data formats used by the MDM protocol are thoroughly standards-based. Detailed, authoritative description of the transactions between the device and the enterprise are available to Apple-registered developers at <b>https://developer.apple.com</b>.
+<br/>
+<br/>
+Additional description and security analysis is available in <b>https://github.com/intrepidusgroup/imdmtools/blob/master/Presentations/InsideAppleMDM_ShmooCon_2012.pdf</b>, linked from <b>intrepidusgroup.com/insight/2012/01/changes-to-apple-mdm-for-ios-5-x/</b>.
+</rationale>
+      </Group>
+      <Group id="manual_deployment_with_iphone_configuration_utility">
+        <title>Manual Deployment with iPhone Configuration Utility</title>
+        <description> Manually using the iPhone Configuration Utility (iPCU) is the
+safest means of deploying configuration profiles to devices, but does not scale
+well as it depends on administrators&#x2019; manual intervention. It also implies that
+an MDM server will not be used to remotely monitor device status. Nevertheless,
+transferring the profile to a device which is directly connected via USB cable
+avoids threats to confidentiality and integrity inherent in network transfers.
+</description>
+        <rationale> iPCU is available at <b>http://www.apple.com/support/iphone/enterprise/</b> (cryptographic checksum unavailable). Documentation is available at <b>http://help.apple.com/iosdeployment-ipcu/</b>.
+</rationale>
+      </Group>
+      <Group id="avoid_unauthenticated_unencrypted_deployment_methods">
+        <title>Avoid Unauthenticated, Unencrypted Deployment Methods</title>
+        <description> Avoid deployment of configuration profiles through methods that
+do not provide encryption and authentication. Email is especially discouraged.
+</description>
+        <rationale> It is possible to distribute configuration profiles to individual
+devices by emailing the profile to the user of the device or providing a link
+via SMS. Once the profile is accepted by the end user, the iOS device
+facilitates its installation. These methods are not recommended because they do
+not generally provide authentication of the sender of the configuration
+profile, or encryption of the profile itself during transmission. Users should
+generally be taught not to have confidence about the origin of email
+attachments or SMS messages.
+<br/>
+<br/>
+Emailing configuration profiles also presupposes that the user has configured an email account on the iPhone.
+<br/>
+<br/>
+Furthermore, once the configuration profile is in the receiver&#x2019;s mailbox, it will remain there until it is manually deleted. If the mobile profile contains sensitive information, its prolonged existence in an unmanaged mailbox poses additional risk.</rationale>
+      </Group>
+    </Group>
+  </Group>
+  <Group id="settings">
+    <title>System Settings</title>
+    <Group id="passcode">
+      <title>Passcode</title>
+      <description> The remarkable attention paid to passcode quality requirements
+represents misplaced priorities in the current network environment, as
+passcodes do not protect against many contemporary threats. However, setting a
+passcode enables cryptographic features that can protect data on the device if
+it is lost, stolen or temporarily out of possession. Hardware and software
+cryptographic features of iOS devices &#x2013; not present on typical desktop or
+server systems &#x2013; provide significant protections against the password-guessing
+threat when the passcode feature is enabled. Furthermore, iOS devices are
+likely to store only a single user&#x2019;s credentials, while complex passcode
+policies are designed to protect against the compromise of large numbers of
+credentials when they are stored on a single system that becomes compromised
+(such as a directory server). Onerous passcode policies may also drive users to
+attempt to subvert the settings. For these reasons, IT decision makers should
+understand that onerous passcode policies on iOS devices provide little value
+(in the best case), and may end up being counterproductive.
+
+The following publicly-available research provides rationale for these recommendations:
+<ul><li><i>Apple iOS 4 Security Evaluation</i> by Dino Dai Zovi at: 
+<b>http://www.trailofbits.com/resources/ios4_security_evaluation_slides.pdf</b>. The slides&#x2019; section &#x201C;Attacking Passcode&#x201D; provides highly relevant platform-specific discussion for iOS devices.
+</li><li>NIST Special Publication 800-118 <i>DRAFT Guide to Enterprise Password
+Management</i> at
+<b>http://csrc.nist.gov/publications/PubsDrafts.html#SP-800-118</b> provides
+discussion about factors that should be considered in order to create effective
+password strength recommendations.
+</li></ul>
+</description>
+      <Group id="enable_passcode">
+        <title>Enable Passcode</title>
+        <description> The following passcode settings are recommended, and can be
+deployed via a configuration profile. </description>
+        <Rule id="disable_simple_value_for_passcode">
+          <title>Disable Simple Value for Passcode</title>
+          <description> Set <b>Allow simple value</b> to <b>Unchecked</b>. </description>
+          <rationale>Disabling the use of simple values for a passcode enables display
+of the entire keyboard for passcode entry, instead of only a numeric keypad.
+</rationale>
+          <ref nist="IA-5(1)"/>
+        </Rule>
+        <Rule id="require_alphanumeric_value_for_passcode">
+          <title>Require Alphanumeric Value for Passcode</title>
+          <description> Set <b>Require alphanumeric value</b> to <b>Checked</b>. </description>
+          <rationale> Requiring alphanumeric values should increase the search space in a
+password-guessing attack. </rationale>
+          <ref nist="IA-5(1)"/>
+        </Rule>
+        <Rule id="set_minimum_passcode_length">
+          <title>Set Minimum Passcode Length</title>
+          <description> Set <b>Minimum passcode length</b> to a value. </description>
+          <rationale> Setting a minimum length should increase the search space in a
+password-guessing attack. A passcode length between 4 and 6 may be a reasonable balance
+between user experience and security for many deployment scenarios.
+</rationale>
+          <ref nist="IA-5(1)"/>
+        </Rule>
+        <Rule id="set_minimum_number_of_complex_characters">
+          <title>Set Minimum Number of Complex Characters</title>
+          <description> Set <b>Minimum number of complex characters</b> to a value.
+</description>
+          <rationale> Requiring complex characters should increase the search space in a
+password-guessing attack. </rationale>
+          <ref nist="IA-5(1)"/>
+        </Rule>
+        <Rule id="set_maximum_passcode_age">
+          <title>Set Maximum Passcode Age</title>
+          <description> Set <b>Maximum passcode age</b> to a number of a days, if there is a need
+for such rotation. </description>
+          <rationale> Changing passcodes prevents an attacker who has
+compromised the password from re-using it to regain access. This is an unlikely
+scenario, but is addressed by setting a password expiration. A value of 120 days is
+likely to be adequate for many deployment scenarios.</rationale>
+          <ref nist="IA-5(1)"/>
+        </Rule>
+        <Rule id="set_auto_lock_time">
+          <title>Set Auto-Lock Time</title>
+          <description> Set <b>Auto-Lock (in minutes)</b> to a number of minutes.
+A value of 5 minutes may be a reasonable balance
+between user experience and security for many deployment scenarios.
+</description>
+          <rationale>Automatically locking the device after a period of inactivity
+ensures that the device will require passcode entry if lost or left unattended. 
+</rationale>
+        </Rule>
+        <Rule id="set_passcode_history">
+          <title>Set Passcode History</title>
+          <description> Set <b>Passcode History</b> to <b>3</b>. </description>
+          <rationale>Setting a passcode history ensures that users cannot trivially
+alternate between passcodes.</rationale>
+          <ref nist="IA-5(1)"/>
+        </Rule>
+        <Rule id="set_grace_period_for_device_lock">
+          <title>Set Grace Period for Device Lock</title>
+          <description> Set <b>Grace period for device lock</b> to 5 minutes, or less.
+</description>
+          <rationale> This permits unlock of the device after a certain period of time
+has passed since the last device lock. Allowing a Grace Period enhances
+usability and makes users more likely to tolerate passcode requirements.
+</rationale>
+          <ref nist="IA-11"/>
+        </Rule>
+        <Rule id="set_maximum_number_of_failed_attempts">
+          <title>Set Maximum Number of Failed Attempts</title>
+          <description> Set <b>Maximum number of failed attempts</b> to 10 attempts, or
+fewer. </description>
+          <rationale> Setting the device to automatically erase after a number of failed
+attempts can protect against witless password guessing attacks conducted
+through the unlock screen. 
+</rationale>
+          <ref nist="IA-5(1)"/>
+        </Rule>
+      </Group>
+      <Group id="understand_which_files_are_protected_by_encryption">
+        <title>Understand Which Files are Protected by Encryption</title>
+        <description> Enabling a passcode activates the Data Protection feature of iOS.
+The Data Protection feature encrypts items with a key whose availability
+depends on entry of the passcode. Currently, the following items are protected:
+<ul><li><b>Email messages</b> stored by the built-in Mail app </li><li><b>Inactive Apps&#x2019; Screenshots</b> displayed at app re-launch to create
+impression of &#x201C;instant resume&#x201D; </li><li><b>Some Keychain Items</b> such as email passwords and iTunes backup password </li><li><b>Data stored by third-party apps</b> which use the Data Protection API </li></ul>
+</description>
+        <rationale> In fact, the rest of the files on the device are encrypted, but
+they are still available to an attacker who can get privileged code to execute
+on the device. This is because the encryption key for these files is available
+even without the passcode (unlike the files above).
+
+This was possible for a time using publicly-available tools which provide the ability
+to execute privileged code on any device in physical possession. Examples of
+these tools include jailbreak software such as <i>evasi0n</i> from the evad3rs
+and <i>redsn0w</i> from The iPhone Dev Team. These applications leverage a
+collection of exploits and other jailbreak utilities including <i>limera1n</i>
+by George Hotz (geohot).
+
+Note also that even if privileged code can be run by an attacker on a lost or
+stolen iPhone, a password-guessing attack against the protected files must be
+executed on the device itself. This is because the key which encrypts the items
+listed above is derived from the passcode as well as a key that is bound to the
+hardware of the device (and not considered extricable from it).
+
+The following references provide detailed explanation:
+<ul><li><i>iPhone data protection in depth</i> by Jean-Baptiste B&#xE9;drune and Jean Sigwald
+(Sogeti ESEC) available at <b>http://esec-lab.sogeti.com/dotclear/public/publications/11-hitbamsterdam-iphonedataprotection.pdf</b> linked from <b>http://esec-lab.sogeti.com/post/iOS-5-data-protection-updates</b>.
+</li><li><i>Apple iOS 4 Security Evaluation</i> by Dino Dai Zovi (Trail of Bits)
+available at <b>http://trailofbits.files.wordpress.com/2011/08/apple-ios-4-security-evaluation-whitepaper.pdf</b> linked from <b>http://trailofbits.wordpress.com/2011/08/10/ios-4-security-evaluation/</b>.
+</li></ul>
+</rationale>
+      </Group>
+    </Group>
+    <Group id="restrictions">
+      <title>Restrictions</title>
+      <description> Some security-relevant restrictions can be placed upon the user
+of the iOS device. </description>
+      <Group id="device_functionality">
+        <title>Device Functionality</title>
+        <Rule id="disable_installation_of_third_party_apps">
+          <title>Disable Installation of Third-Party Apps</title>
+          <description> Unless necessary, disable <b>Allow installing apps</b>. This is
+unusual for a general-purpose device. </description>
+          <rationale> While iOS includes features such as sandboxing that are designed to
+prevent third-party apps from influencing the integrity of the operating
+system, they do have the ability to access data stored on the device such as
+Address Book, Location Data, or the Photo Library, and have the
+ability to transmit this information. </rationale>
+          <ref nist="CM-11(2)"/>
+        </Rule>
+        <Rule id="disable_camera">
+          <title>Disable Camera</title>
+          <description> Disable <b>Allow use of camera</b>, if concerns exist about
+capturing sensitive images. </description>
+          <ref nist="SC-42"/>
+        </Rule>
+        <Rule id="disable_screen_capture">
+          <title>Disable Screen Capture</title>
+          <description> Disable <b>Allow screen capture</b>, if concerns exist about
+storing screen contents in the Photo Library. </description>
+          <rationale> While unlikely, this feature could accidentally be triggered (by
+simultaneously pressing the Home and Sleep buttons) and lead to storage of
+sensitive information outside the intended storage area.</rationale>
+        </Rule>
+      </Group>
+      <Group id="applications">
+        <title>Applications</title>
+        <Rule id="disable_itunes_store">
+          <title>Disable use of iTunes Store</title>
+          <description> Deselect <b>Allow use of iTunes Store</b>, to prevent access to media content and applications.</description>
+          <rationale>iTunes provides access to media content and applications.</rationale>
+        </Rule>
+        <Group id="safari">
+          <title>Safari</title>
+          <description>The Safari web browser is included with iOS, and the following
+section provides discussion of security-relevant settings.
+Additional information about Safari security settings on
+iOS is available at <b>http://support.apple.com/kb/HT1677</b>.
+</description>
+          <Rule id="disable_safari">
+            <title>Disable Safari</title>
+            <description>If Safari can be disabled, uncheck <b>Allow use of Safari</b>.
+<b><i>This is very unusual for a general-purpose device.</i></b></description>
+            <rationale>Devices in specialized use cases may not require the use of a web
+browser such as Safari.
+</rationale>
+          </Rule>
+          <Rule id="disable_safari_autofill">
+            <title>Disable Safari Autofill</title>
+            <description> Deselect <b>Enable autofill</b>, to prevent storage of
+some potentially sensitive information by Safari. </description>
+            <rationale>Storage of autofill information permits an attacker to harvest
+previously-used credentials in the event that the device becomes
+compromised.
+</rationale>
+          </Rule>
+          <Rule id="enable_safari_fraud_warning">
+            <title>Enable Safari Fraud Warning</title>
+            <description> Select <b>Force fraud warning</b>, to ensure users are
+warned when visiting known-fraudulent web sites. </description>
+            <rationale>Fraudulent web sites may try to collect sensitive information
+from users.
+</rationale>
+          </Rule>
+          <Rule id="disable_javascript">
+            <title>Disable JavaScript</title>
+            <description> Deselect <b>Enable javascript</b>, to prevent JavaScript from
+running in Safari. <i>This makes the Internet virtually useless and is only
+appropriate for unusual, high-security scenarios.</i>
+</description>
+            <rationale>JavaScript permits client-side scripts to run within the browser.
+Nearly all modern web sites use JavaScript, though its functionality
+constitutes an attack surface.</rationale>
+          </Rule>
+          <Rule id="enable_safari_pop_up_blocking">
+            <title>Enable Safari Pop-up Blocking</title>
+            <description> Set <b>Block pop-ups</b> to <b>Checked</b>. </description>
+            <rationale>Blocking pop-ups prevents malicious or obnoxious web sites from
+interfering with the user in an unexpected and possibly security-relevant
+manner.</rationale>
+          </Rule>
+          <Rule id="accept_cookies_from_visited_sites_only">
+            <title>Accept Cookies from Visited Sites Only</title>
+            <description> Set <b>Accept cookies</b> to <b>From visited sites</b>.</description>
+            <rationale>Accepting cookies from only visited sites decreases the extent
+to which third-party web sites can track user activity.</rationale>
+          </Rule>
+        </Group>
+      </Group>
+      <Group id="icloud_configuration">
+        <title>iCloud configuration</title>
+        <description>Policies regarding the usage of cloud-based storage services
+continue to evolve, as do the assurances of safety by cloud providers. In
+general, if there is a need to store potentially sensitive information on the
+iOS device, then the following restrictions should be considered.</description>
+        <Rule id="disable_icloud_backups">
+          <title>Disable iCloud Backups</title>
+          <description>Set <b>Allow backup</b> to <b>Unchecked</b>. </description>
+          <rationale>Backing up iOS devices to iCloud may involve placing enterprise data
+on systems that are not controlled by the enterprise.</rationale>
+        </Rule>
+        <Rule id="disable_icloud_document_sync">
+          <title>Disable iCloud Document Sync</title>
+          <description>Set <b>Allow document sync</b> to <b>Unchecked</b>.</description>
+          <rationale>Synchronizing documents to iCloud involves placing data on systems
+that are not controlled by the enterprise.
+</rationale>
+        </Rule>
+        <Rule id="disable_icloud_photo_stream">
+          <title>Disable iCloud Photo Stream</title>
+          <description>Set <b>Allow Photo Stream</b> to <b>Unchecked</b>.</description>
+          <rationale>If photographs may constitute sensitive enterprise data, then
+transferring photos to iCloud could involve placing such data on systems that
+are not controlled by the enterprise.</rationale>
+        </Rule>
+      </Group>
+      <Group id="security_and_privacy">
+        <title>Security and Privacy</title>
+        <Rule id="disable_sending_diagnostic_data_to_apple">
+          <title>Disable Sending Diagnostic Data to Apple</title>
+          <description> Disable <b>Allow diagnositic data to be sent to Apple</b> to
+Unchecked, if this presents concerns about inadvertent transmission of
+sensitive data.</description>
+          <rationale>Diagnostic data could be considered sensitive in some environments
+and not transmitted outside enterprise control.
+</rationale>
+        </Rule>
+        <Rule id="disable_user_acceptance_of_untrusted_tls_certificates">
+          <title>Disable User Acceptance of Untrusted TLS Certificates</title>
+          <description> Set <b>Allow user to accept untrusted TLS certificates</b> to
+Unchecked.  Root CAs trusted by iOS are available at
+<b>http://support.apple.com/kb/HT5012</b>.
+</description>
+          <rationale>Presentation of an untrusted TLS certificate to client software
+could indicate a man-in-the-middle attack.  
+</rationale>
+        </Rule>
+        <Rule id="force_encrypted_backups">
+          <title>Force Encrypted Backups</title>
+          <description> Set <b>Force encrypted backups</b> to Checked, in order
+to ensure that the contents of iOS devices are encrypted when backed up
+onto host computers.
+</description>
+          <rationale>Encrypting device backups protects hosts backups even if the host
+later becomes compromised.  </rationale>
+        </Rule>
+      </Group>
+    </Group>
+    <Group id="wi_fi">
+      <title>Wi-Fi</title>
+      <description> iOS devices support 802.1X authentication for WPA2 Enterprise
+networks, and this is strongly recommended. A RADIUS server is required for
+802.1X authentication and typically involves the use of public key
+infrastructure. User education and training is also important, since the user
+has control over the device&#x2019;s network settings. Section  contains information
+for users. DoD Instruction 8420.01, available at <b>http://www.dtic.mil/whs/directives/corres/pdf/842001p.pdf</b>, provides information for DoD entities regarding the configuration and deployment of WiFi networks. </description>
+      <Rule id="disable_auto_join_for_wi_fi">
+        <title>Disable Auto-Join for Wi-Fi</title>
+        <description>Ensure that <b>Auto Join</b> is disabled for WiFi networks.
+</description>
+        <rationale> Disabling auto join ensures that users are aware of when
+connections to WiFi networks are being made. </rationale>
+      </Rule>
+      <Rule id="use_wpa__wpa2_enterprise_for_wi_fi_encryption">
+        <title>Use WPA / WPA2 Enterprise for Wi-Fi Encryption</title>
+        <description> Using <b>WPA / WPA2 Enterprise</b> with <b>TLS</b> for
+authentication is recommended. If TLS support is not available, <b>PEAP</b> is
+the next best choice for authentication. All other authentication protocols are
+not recommended. </description>
+        <rationale> Use <b>WPA / WPA2</b> if authentication support is not available.
+Proxy servers can be configured with WiFi as another layer for providing
+control of the connection. </rationale>
+      </Rule>
+    </Group>
+    <Group id="vpn">
+      <title>VPN</title>
+      <description> VPN connectivity obviously depends on an enterprise&#x2019;s available
+infrastructure, but VPNs which use IPsec are preferred. Several SSL VPNs are
+also supported by iOS. Actual VPNs are preferred over SSL VPNs as they are
+designed to protect systemwide network communications. Note, however, that at
+this time iOS VPNs cannot be configured to route all traffic through a VPN, and
+operate in split tunnel mode. This behavior occurs even if <b>Send All
+Traffic</b> is selected as part of any VPN&#x2019;s configuration. </description>
+      <Rule id="select_ipsec_cisco_or_l2tp_for_use_as_vpn">
+        <title>Select IPsec (Cisco) or L2TP for Use as VPN</title>
+        <description> Select <b>IPsec (Cisco)</b> or <b>L2TP</b> (which also uses
+IPsec) for use as the Connection Type if possible. Use of hardware tokens is
+generally preferred over passwords for user authentication. </description>
+        <rationale> Apple provides documentation regarding iOS VPN capabilities in the
+following documents:
+<ul><li><i>VPN Server Configuration for iOS Devices</i>, available at:
+<b>http://help.apple.com/iosdeployment-vpn/</b></li><li><i>iOS: Supported protocols for VPN</i>, available at:
+<b>http://support.apple.com/kb/HT1288</b></li></ul>
+The following documents provide recommendations for configuring VPNs
+in an enterprise infrastructure:
+<ul><li><i>Guide to IPSec VPNs</i> (NIST SP 800-77), available at: 
+<b>http://csrc.nist.gov/publications/nistpubs/800-77/sp800-77.pdf</b>.
+</li><li><i>Guide to SSL VPNs</i> (NIST SP 800-113), available at:
+<b>http://csrc.nist.gov/publications/nistpubs/800-113/SP800-113.pdf</b>.
+</li></ul>
+</rationale>
+        <ref nist="AC-18(1)"/>
+      </Rule>
+    </Group>
+    <Group id="email">
+      <title>Email</title>
+      <description> Permitting users to access only enterprise-supported email
+accounts decreases the risk posed by email-based attacks. It ensures that
+enterprise-provided countermeasures against email attacks (such as content
+filters or anti-virus software) can scan email transmitted to the device.
+</description>
+      <Rule id="prevent_moving_messages_between_mail_accounts">
+        <title>Prevent Moving Messages between Mail Accounts</title>
+        <description> Disable <b>Allow Move</b> for all email accounts. </description>
+        <rationale>Moving mail directly between accounts could permit the movement of
+enterprise information to personal email accounts.  While this is possible
+simply through email forwarding, in that case the enterprise email server (when
+used as the MTA) has at least the possibility of logging such transfers.
+</rationale>
+      </Rule>
+      <Rule id="enable_s_mime_support_for_mail_if_needed">
+        <title>Enable S/MIME Support for Mail if Needed</title>
+        <description> Set <b>Enable S/MIME</b> to <b>Checked</b>, to provide encrypted and
+authenticated email support. Ensure that transmission of
+configuration profiles to devices is encrypted and authenticated if S/MIME
+certificates containing private keys are embedded. The iOS device can also be
+configured to use an SCEP server to retrieve S/MIME certificates for use with
+Mail.</description>
+        <rationale>S/MIME provides the capability for users to send and receive S/MIME
+email messages from wireless email devices. S/MIME and digital signatures
+provide assurance the message is authentic. Without S/MIME users will not be
+able to read encrypted email and will not be able to encrypt email with
+sensitive information.
+</rationale>
+        <ref nist="SI-7(6),SC-8"/>
+      </Rule>
+      <Rule id="enable_ssl_for_mail_connections">
+        <title>Enable SSL for Mail Connections</title>
+        <description> Ensure <b>Use SSL</b> is enabled for all incoming and outgoing
+email accounts.</description>
+        <rationale>SSL provides authentication of the mail server to
+which the mail client connects, and also encrypts traffic between the mail
+server and the email client.
+</rationale>
+        <ref nist="SI-7(6),SC-8"/>
+      </Rule>
+    </Group>
+    <Group id="exchange_activesync">
+      <title>Exchange ActiveSync</title>
+      <description> If your organization employs Microsoft Exchange to manage user
+accounts and maintain device policies, configuring Exchange ActiveSync will
+bind the device to the user&#x2019;s Microsoft Exchange account, syncing email,
+calendars and contacts with the device. </description>
+      <Rule id="prevent_moving_messages_between_activesync_accounts">
+        <title>Prevent moving messages between ActiveSync accounts</title>
+        <description> Disable <b>Allow Move</b> for all Exchange ActiveSync accounts.
+</description>
+      </Rule>
+      <Rule id="allow_mail_from_this_account_only_from_the_mail_app">
+        <title>Allow Mail from this Account Only from the Mail App</title>
+        <description> Enable <b>Use Only in Mail</b> for all Exchange ActiveSync
+accounts. </description>
+      </Rule>
+      <Rule id="enable_ssl_for_activesync_communications">
+        <title>Enable SSL for ActiveSync Communications</title>
+        <description> Ensure <b>Use SSL</b> is <b>Checked</b> for all Exchange ActiveSync
+accounts. </description>
+      </Rule>
+      <Rule id="enable_s_mime_support_for_activesync_if_needed">
+        <title>Enable S/MIME Support for ActiveSync if Needed</title>
+        <description> Set <b>Enable S/MIME</b> to <b>Checked</b>, if encrypted and
+authenticated email support is needed. Ensure that transmission of
+configuration profiles to devices is encrypted and authenticated if S/MIME
+certificates containing private keys are embedded. The iOS device can also be
+configured to use an SCEP server to retrieve S/MIME certificates for use with
+Mail. </description>
+      </Rule>
+    </Group>
+    <Group id="ldap">
+      <title>LDAP</title>
+      <Rule id="enable_ssl_for_ldap_connections">
+        <title>Enable SSL for LDAP Connections</title>
+        <description> Ensure <b>Use SSL</b> is enabled if using an LDAP service.
+</description>
+        <rationale>SSL provides authentication of the LDAP server to
+which the system connects, and also encrypts traffic between the iOS device
+and the LDAP server.
+</rationale>
+      </Rule>
+    </Group>
+    <Group id="webdav">
+      <title>Calendars and Address Books</title>
+      <Group id="caldav">
+        <title>CalDav</title>
+        <Rule id="enable_ssl_for_caldav_connections">
+          <title>Enable SSL for CalDav Connections</title>
+          <description> Ensure <b>Use SSL</b> is enabled if using a CalDav service.
+</description>
+          <rationale>SSL provides authentication of the CalDav server to
+which the iOS device connects, and also encrypts traffic between the CalDav
+server and the iOS device.
+</rationale>
+        </Rule>
+      </Group>
+      <Group id="subscribed_calendars">
+        <title>Subscribed Calendars</title>
+        <Rule id="enable_ssl_for_subscribed_calendar_connections">
+          <title>Enable SSL for Subscribed Calendar Connections</title>
+          <description> Ensure <b>Use SSL</b> is enabled if connecting to calendar
+subscriptions.</description>
+          <rationale>SSL provides authentication of servers that provide calender
+subscriptions, and also encrypts traffic between the calendar subscription
+server and the iOS device.</rationale>
+        </Rule>
+      </Group>
+      <Group id="carddav">
+        <title>CardDav</title>
+        <Rule id="enable_ssl_for_carddav_connections">
+          <title>Enable SSL for CardDav Connections</title>
+          <description> Enable <b>Use SSL</b> if using a CardDav service. </description>
+          <rationale>SSL provides authentication of the CardDav server to
+which the iOS device connects, and also encrypts traffic between the CardDav
+server and the email client.
+</rationale>
+        </Rule>
+      </Group>
+    </Group>
+    <Group id="certs">
+      <title>Certificates</title>
+      <Group id="credentials">
+        <title>Credentials</title>
+        <description> If your organization employs any self-signed certificates, embed
+them in the configuration profile or use SCEP to distribute.
+Note that embeddeding any credentials into the configuration profile introduces
+the need for encryption during profile deployment.
+</description>
+        <Group id="scep">
+          <title>SCEP</title>
+          <description> If your organization will use the Simple Certificate Enrollment
+Protocol to distribute certificates and configuration profiles, include its
+settings with the configuration profile. These settings may be handled by MDM
+products in a manner that is automated, and not tied to individual users.
+</description>
+          <Rule id="set_a_challenge_password">
+            <title>Set a Challenge Password</title>
+            <description> In the <b>Challenge</b> field, enter a strong passphrase to be
+used as a pre-shared secret for automatic enrollment. </description>
+            <ref nist="IA-2(2)"/>
+          </Rule>
+        </Group>
+      </Group>
+    </Group>
+    <Group id="mobile_device_management">
+      <title>Mobile Device Management</title>
+      <description> Some behavior of Mobile Device Management (MDM) software can be
+configured inside a configuration profile. This includes how much information
+an MDM server can retrieve from a device, whether an MDM server can update
+profiles remotely, whether an MDM server can remotely wipe a device, and
+whether an MDM server can reset a device&#x2019;s password. These settings allow for
+more fine-grained adjustment between enterprise control versus user control of
+a device. Some MDM products may not permit administrators to disable some of
+their capability for querying devices.  Information about enterprise deployment
+using MDM is available from Apple at
+<b>http://www.apple.com/ipad/business/it-center/deployment-mdm.html</b>.
+</description>
+      <Group id="sign_messages">
+        <title>Sign Messages</title>
+        <description> Set <b>Sign messages</b> to Checked. </description>
+        <rationale> This setting causes responses generated by the device (in response
+to commands from the MDM server) to be signed with the device&#x2019;s identity
+certificate. </rationale>
+      </Group>
+      <Group id="check_out_when_removed">
+        <title>Check Out When Removed</title>
+        <description> Set <b>Check out when removed</b> to Checked. </description>
+        <rationale> This causes the device to send a message to the MDM server whenever
+the configuration profile is removed. </rationale>
+      </Group>
+      <Group id="access_rights_for_remote_administrators">
+        <title>Access Rights for Remote Administrators</title>
+        <description> The following settings control what an MDM server is permitted to
+query from an iOS device. For an enterprise-owned, enterprise-controlled
+device, permitting the enterprise administrator to query as much information as
+possible is appropriate. Some MDM products may simply include these access
+rights by default and offer options to retrieve less information from the
+device.  
+
+<br/>
+<br/>
+At the same time, querying all of these types of information may not be
+appropriate even for some enterprise users, and for enterprises that support
+BYOD scenarios. The terms of any individual organization&#x2019;s &#x201C;BYOD Contract&#x201D; with
+their users is beyond the scope of this document. </description>
+        <Rule id="allow_remote_query_of_general_settings">
+          <title>Allow Remote Query of General Settings</title>
+          <description> In the <b>Query device for</b> section, set <b>General
+settings</b> to Checked. </description>
+          <rationale>ALlowing an enterprise to be able to query general device settings
+such as profile names and identifiers permits the enterprise to have insight
+into the ownership of profiles installed onto the device.
+</rationale>
+          <ref nist="CA-9"/>
+        </Rule>
+        <Rule id="allow_remote_query_of_security_settings">
+          <title>Allow Remote Query of Security Settings</title>
+          <description> In the <b>Query device for</b> section, set <b>Security
+settings</b> to Checked. </description>
+          <rationale>Allowing an enterprise to be able to query security settings
+permits the enterprise to have insight into the device's security posture.
+</rationale>
+          <ref nist="CA-9"/>
+        </Rule>
+        <Rule id="allow_remote_query_of_network_settings">
+          <title>Allow Remote Query of Network Settings</title>
+          <description> In the <b>Query device for</b> section, set <b>Network
+settings</b> to Checked. </description>
+          <rationale>Allowing an enterprise to be able to query network settings
+permits the enterprise to have insight into the device's network
+connection capabilities.
+</rationale>
+        </Rule>
+        <Rule id="allow_remote_query_of_restrictions">
+          <title>Allow Remote Query of Restrictions</title>
+          <description> In the <b>Query device for</b> section, set <b>Restriction</b> to
+Checked. </description>
+          <rationale>Allowing an enterprise to be able to query restrictions
+enforced on the device permits the enterprise to have insight into
+whether certain device behavior is configured, such as encrypted
+backups.
+</rationale>
+        </Rule>
+        <Rule id="allow_remote_query_of_configuration_profiles">
+          <title>Allow Remote Query of Configuration Profiles</title>
+          <description> In the <b>Query device for</b> section, set <b>Configuration
+Profiles</b> to Checked. </description>
+          <rationale>Allowing an enterprise to be able to query installed configuration
+profiles permits the enterprise to understand the overall composed configuration
+applied to the device.
+</rationale>
+          <ref nist="CA-9"/>
+        </Rule>
+        <Rule id="allow_remote_query_of_applications">
+          <title>Allow Remote Query of Applications</title>
+          <description> In the <b>Query device for</b> section, set <b>Applications</b>
+to Checked. </description>
+          <rationale>Allowing an enterprise to query installed applications 
+provides insight into the device's software inventory, which is valuable
+in incident response.
+</rationale>
+        </Rule>
+        <Rule id="allow_remote_query_of_provisioning_profiles">
+          <title>Allow Remote Query of Provisioning Profiles</title>
+          <description> In the <b>Query device for</b> section, set <b>Provisioning
+Profiles</b> to Checked. </description>
+          <rationale>Allowing an enterprise to be able to query installed provisioning
+profiles permits the enterprise to be aware of expiry dates
+for these.
+</rationale>
+        </Rule>
+        <Rule id="allow_remote_addition_removal_of_configuration_profiles">
+          <title>Allow Remote Addition/Removal of Configuration Profiles</title>
+          <description> In the <b>Add / Remove</b> section, set <b>Configuration
+Profiles</b> to Checked. </description>
+          <rationale> Allowing an enterprise to add or remove configuration profiles
+permits an enterprise MDM server to be able to update these profiles remotely.
+</rationale>
+        </Rule>
+        <Rule id="allow_remote_addition_removal_of_provisioning_profiles">
+          <title>Allow Remote Addition/Removal of Provisioning Profiles</title>
+          <description> In the <b>Add / Remove</b> section, set <b>Provisioning
+Profiles</b> to Checked. </description>
+          <rationale> Allowing an enterprise to add or remove provisioning profiles
+permits an enterprise MDM server to be able to update these profiles remotely.
+</rationale>
+        </Rule>
+        <Rule id="allow_remote_addition_removal_of_apps">
+          <title>Allow Remote Addition/Removal of Apps</title>
+          <description> In the <b>Add / Remove</b> section, set <b>Apps</b>
+to Checked.  This applies to managed apps, which are purchased by
+the enterprise via the Volume Purchasing Program.
+</description>
+          <rationale> Allowing an enterprise to add or remove managed apps provides the
+enterprise with the ability to easily deploy enterprise applications to
+devices. The MDM server can also specify that the data in managed apps be
+removed when the MDM profile is removed, to protect enterprise data.</rationale>
+        </Rule>
+        <Rule id="allow_remote_addition_removal_of_settings">
+          <title>Allow Remote Addition/Removal of Settings</title>
+          <description> In the <b>Add / Remove</b> section, set <b>Settings</b> to Checked.
+</description>
+          <rationale>Allowing an enterprise to add or remove settings
+provides agility with regard to individual settings management.
+</rationale>
+        </Rule>
+        <Rule id="allow_or_disallow_remote_change_of_device_password">
+          <title>Allow or Disallow Remote Change of Device Password</title>
+          <description> In the <b>Security</b> section, set <b>Change device password</b>
+to Unchecked or Checked. This entails a risk decision, though Checked is likely
+to be appropriate for most scenarios. </description>
+          <rationale> Most enterprises are likely well-served by permitting the MDM
+administrator to remotely send a change password command, in order to allow
+users with forgotten passcodes to maintain access to their devices. This would
+also permit an enterprise with appropriate authority, and which needed to
+overcome the Data Protection feature (such as for forensics purposes) the
+ability to do so.
+<br/>
+<br/>
+At the same time, an attacker who has compromised communications between the
+device and its MDM server (or the MDM server itself), could maliciously send a
+password-change command to defeat the data-at-rest protection on the devices.
+This would depend upon an attacker&#x2019;s physical compromise of the device as well
+as compromise of TLS communications (or the MDM server itself).
+</rationale>
+        </Rule>
+        <Rule id="allow_remote_wipe">
+          <title>Allow Remote Wipe</title>
+          <description> Set <b>Remote wipe</b> to Checked. </description>
+          <rationale>Permitting remote wipe allows the enterprise to remotely wipe an iOS
+device in the event that it is lost or stolen.
+<br/>
+<br/>
+Note also that a layered configuration profile approach which involves specific
+configuration profiles permitting access to specific services (which can be
+removed by an MDM server), effectively permits selective removal of access to
+services (and their local data). This can provide a form of remote wipe that is
+more appropriate with BYOD scenarios that are incompatible with IT staff wiping
+entire devices.
+</rationale>
+        </Rule>
+      </Group>
+    </Group>
+    <Group id="manually_configured_device_settings">
+      <title>Manually-Configured Device Settings</title>
+      <description> The following security-relevant settings can be manually applied.
+These settings depend on the user&#x2019;s control of the device, and thus training
+users can help them make appropriate choices. </description>
+      <Rule id="disable_wi_fi_if_practical">
+        <title>Disable Wi-Fi, if Practical</title>
+        <description> If the iOS device is not to be connected to a Wi-Fi network,
+disable Wi-Fi. Set <b>Settings &gt; Wi-Fi &gt; Off</b>. </description>
+        <rationale> Disabling <b>Ask to Join Networks</b> will prevent the phone from
+automatically associating with previously known (but potentially-spoofed)
+access points without user interaction, and should be disabled whenever
+possible. Users should be instructed to use only trusted WiFi networks.
+</rationale>
+        <ref nist="AC-18(3)"/>
+      </Rule>
+      <Rule id="disable_bluetooth_manually_if_practical">
+        <title>Disable Bluetooth Manually, if Practical</title>
+        <description> To disable Bluetooth, set <b>Settings &gt; Bluetooth &gt; Off</b>, when practical. </description>
+        <rationale> Leaving Bluetooth enabled can expose the presence of an iOS device,
+although the device provides visual cues when it is in the Bluetooth
+&#x201C;discoverable&#x201D; mode which allows it to pair with other devices. The Bluetooth
+profiles supported by iOS are described at <b>http://support.apple.com/kb/HT3647</b>.
+</rationale>
+        <ref nist="AC-18(3)"/>
+      </Rule>
+      <Rule id="disable_location_services_if_practical">
+        <title>Disable Location Services, if Practical</title>
+        <description> If the ability of apps and web pages to determine the location of
+the device poses an unacceptable risk, disable Location Services. Set
+<b>Settings &gt; General &gt; Restrictions &gt; Privacy: Location Services &gt; Off</b>. Note also that
+usage of Location Service can be controlled on a per-app basis, at the user&#x2019;s
+discretion. Given the utility of location information for some apps (such as
+Maps), user-determined settings may be most practical. </description>
+        <rationale> If an application (such as Maps) wishes to use Location Services
+while being disabled, the user will be prompted to return to <b>Settings</b> to
+enable it. </rationale>
+      </Rule>
+      <Rule id="disable_loading_of_remote_images_if_practical">
+        <title>Disable Loading of Remote Images, if Practical</title>
+        <description> To disable the automatic loading of images in e-mail, set
+<b>Settings &gt; Mail, Contacts, Calendars&gt; Mail: Load Remote Images &gt; Off </b>
+, if this is practical. </description>
+        <rationale> Automatically loading images in e-mail messages can leak usage
+information to authors of fraudulent e-mail. It can also provide an opportunity
+for malicious images to exploit any implementation flaws in complex graphics
+libraries. At the same time, this may also inhibit viewing of images that are
+useful. </rationale>
+      </Rule>
+    </Group>
+  </Group>
+  <Group id="device_usage_and_handling">
+    <title>Device Usage and Handling</title>
+    <description> This chapter provides recommendations on device usage and
+handling, for both administrators and users. Section  provides handling and
+usage guidance for administrators. These topics include issuing devices,
+managing and accounting for devices once in users&#x2019; hands, and effectively
+educating users on secure device usage.  Further, there are important
+recommendations such as maintaining physical control of the device, not
+jailbreaking the device, and preventing connections to untrusted networks. This
+section closes with suggested usage statements that could be provided to users.
+</description>
+    <Group id="handling_guidance_for_administrators">
+      <title>Handling Guidance for Administrators</title>
+      <description> If the enterprise is planning to procure and distribute devices
+to users, administrators should establish procedures for this activity. Some
+items from this section may not apply to BYOD scenarios, however, such as
+inventory management and prompt retirement of unsupported devices.
+</description>
+      <Group id="establish_a_user_training_program">
+        <title>Establish a User Training Program</title>
+        <description> Create or make available training resources to educate users
+about device security issues and organization policies. Ensure that all device
+users are aware of risks and properly trained to mitigate them. </description>
+        <rationale> Security and policy awareness training reduces the risk of
+user-originated security compromise. This relates closely to any agreements
+between the user and enterprise regarding device handling, which should be
+verified for each user prior to their being issued a device, as described in
+Section . </rationale>
+      </Group>
+      <Group id="issuing_devices">
+        <title>Issuing Devices</title>
+        <description> This section provides recommendations for enterprises issuing iOS
+devices. </description>
+        <Group id="issue_only_supported_devices">
+          <title>Issue Only Supported Devices</title>
+          <description> Ensure that only supported hardware versions are issued.
+Supported hardware versions are defined as those that can run the latest
+version of iOS and receive all updates. To determine this, administrators will
+need to manually note which systems can be updated whenever security updates
+are provided. </description>
+          <rationale> Sometimes only the current version and the previous version of the
+iPhone or iPad hardware can run all updates. This suggests that IT planners
+should anticipate a 2 year (or 3 year, at most) refresh cycle for
+enterprise-purchased devices. </rationale>
+        </Group>
+        <Group id="erase_and_reset_devices_if_re_issuing">
+          <title>Erase and Reset Devices, if Re-issuing</title>
+          <description> If re-issuing devices, erase them before distributing them to
+users. </description>
+          <rationale> Use the command <b>Settings &gt; General &gt; Reset &gt; Erase All
+Content and Settings</b> to erase a device. Clearing content and settings
+returns the device to a stable state and prevents accidental exposure of the
+prior user&#x2019;s data. </rationale>
+        </Group>
+        <Group id="update_device_to_user_registration">
+          <title>Update Device-to-User Registration</title>
+          <description> Establish a system for attributing individual devices to users
+prior to issuance. This information must be updated every time a device is
+issued or transferred. Existing inventory tracking systems or MDM software can
+enable automation of this process. The following pieces of information from
+each device can be useful: <ul><li>UDID (Unique Device Identifier) </li><li>Serial Number </li><li>IMEI (if equipped with a cellular connectivity)
+</li><li>Model Number </li><li>Wi-Fi MAC Address </li><li>Bluetooth MAC
+Address </li></ul>MDM products may also report this information. This
+information should be protected accordingly. </description>
+        </Group>
+        <Group id="verify_user_training_history">
+          <title>Verify User Training History</title>
+          <description> Ensure that users are familiar with the training before receiving
+a new device, and at regular intervals afterward. </description>
+        </Group>
+        <Group id="provide_recharging_hardware_with_device">
+          <title>Provide Recharging Hardware with Device</title>
+          <description> Distribute AC power adapters to users when issuing devices and
+warn users not to connect their devices to unauthorized systems. It may be
+prudent to distribute additional AC power adapters to remove the temptation to
+connect the devices to unknown PCs. </description>
+          <rationale> Connecting iOS devices to unauthorized systems, even if only
+intending to recharge the device, presents a security risk. Providing a power
+adapter, and easy access to replacements and additional adapters, will help
+combat temptation to connect to other systems. Users should never be left with
+connecting to a computer as their only option to recharge their device.
+</rationale>
+        </Group>
+      </Group>
+      <Group id="dealing_with_a_lost_or_stolen_ios_device">
+        <title>Dealing with a Lost or Stolen iOS Device</title>
+        <description> If an iOS device is reported as lost or stolen, the device should
+be immediately disabled to prevent unauthorized use or access. The system
+administrator can issue a remote &#x201C;Wipe&#x201D; command to erase all media, data and
+settings from the device, restoring it to factory settings. Be aware of the
+circumstances under which issuing a wipe may not be possible, such as keeping a
+device in Airplane Mode or simply lacking network connectivity. </description>
+        <Group id="establish_procedure_for_lost_or_stolen_ios_devices">
+          <title>Establish Procedure for Lost or Stolen iOS devices</title>
+          <description> Establish and test a procedure to issue a wipe command to erase
+data from a lost or stolen iOS device. Ensure that users are also aware of
+their responsibilities to report lost or stolen devices. Wipe commands can 
+be issued by an MDM server or by Exchange ActiveSync. Users can also initiate 
+remote wipe using iCloud, if the device is enrolled. </description>
+        </Group>
+      </Group>
+      <Group id="retire_devices_which_cannot_run_latest_os_version">
+        <title>Retire Devices Which Cannot Run Latest OS Version</title>
+        <description> Immediately retire any devices which cannot run the latest iOS
+version. This requires vigilance on the part of administrators, to monitor when
+an update is issued but is not supported on older devices. </description>
+        <rationale> iOS updates include both security patches as well as new
+functionality. Ensure that all iOS device hardware provided and managed by the
+enterprise can always run the latest iOS. For example, all iPhone 3G devices
+should be immediately retired, because they cannot run iOS 6. </rationale>
+      </Group>
+      <Group id="monitor_devices_using_mdm_especially_for_updates">
+        <title>Monitor Devices Using MDM, Especially for Updates</title>
+        <description> MDM products enable enterprise integration and reporting for 
+iOS devices. Regularly monitor the status of devices using MDM software and 
+respond accordingly. Particularly important is
+ensuring that the version of iOS is kept up to date, which implies that all
+available security updates are installed. Some MDM products include the ability
+to disable access to enterprise resources if devices are not kept up to date or
+are otherwise not compliant. </description>
+      </Group>
+    </Group>
+    <Group id="handling_guidance_for_users">
+      <title>Handling Guidance for Users</title>
+      <description> User education is one of the strongest tools an organization can
+use to minimize the risk of security issues. Educating users helps raise
+awareness of their actions and helps them understand the reasoning behind
+policy decisions. This section details physical handling guidance and security
+policy topics to be reinforced to users through an organization-developed user
+education program. </description>
+      <Group id="physical_control">
+        <title>Physical Control</title>
+        <description> Maintain physical control of your iOS device at all times.
+</description>
+        <rationale> All guidance contained in this document depends upon uninterrupted
+physical control of your iOS device. It is your responsibility to maintain
+possession of the device. Never leave your iOS device unattended in an insecure
+location. An unattended device is at high risk for loss, theft, and other forms
+of compromise that could violate the confidentiality, integrity, or
+availability of the device and the information contained therein. </rationale>
+        <Group id="surrendering_physical_control">
+          <title>Surrendering Physical Control</title>
+          <description> Learn the proper procedure for relinquishing control of the iOS
+device to another entity. </description>
+          <rationale> There are times when physical control of the iOS device must be
+surrendered, such as when passing through security or customs inspections. The
+following are possible methods of mitigating potential loss of personal,
+financial or company information. <ul><li>Before entering security or customs
+checkpoints, power down the iOS device, remove its SIM card using the SIM eject
+tool or an unwound paper clip, and place the SIM card in a physically separate
+location such as a bag or your coat pocket. </li><li>Place the device in a
+clear, tamper evident bag. </li><li>Ensure passcode is enabled.
+</li></ul>Organizations may elect to require all of these steps based on their
+security policy. </rationale>
+        </Group>
+        <Group id="notify_security_or_administrative_personnel_upon_loss_of_physical_control">
+          <title>Notify Security or Administrative Personnel Upon Loss of Physical
+Control</title>
+          <description> Obtain the contact information of your System Security Officer
+(SSO) for use in reporting the loss of physical control of your iOS device and
+learn which scenarios require SSO notification. If there is any suspicion that
+a device has been accessed by an unauthorized user, report the incident
+immediately to the appropriate SSO or administrative personnel. </description>
+          <rationale> If a device is lost or stolen, the administrator or SSO should be
+contacted immediately in order to execute the remote wipe procedure through
+Microsoft Exchange, and to create a detailed incident
+report describing the event. Even if you lose control of your iOS device for a
+period of time but regain it later, it should be inspected for signs of
+physical compromise by system administration or security personnel. If a
+compromise is suspected, actions should be taken to sanitize or destroy the
+device, depending on the sensitivity of the data and severity of the situation
+in which it was compromised. </rationale>
+        </Group>
+        <Group id="be_aware_of_your_surroundings">
+          <title>Be Aware of Your Surroundings</title>
+          <description> Be aware of the danger of &#x201C;shoulder surfing,&#x201D; which refers to the
+ability of others to see your entry or viewing of sensitive information on the
+phone. </description>
+          <rationale> Because anyone nearby can potentially view any information
+displayed on the device, be wary of your environment when viewing any sensitive
+information, and particularly wary when entering passwords. Due to obvious
+physical and user interface constraints, password entry is susceptible to
+shoulder surfing, whether by observation of finger position or brief display of
+each character on-screen. Some third-party products may be available to
+mitigate this risk. </rationale>
+        </Group>
+        <Group id="follow_procedures_for_secure_areas">
+          <title>Follow Procedures for Secure Areas</title>
+          <description> Learn the proper procedure for handling your iOS device in a
+secure area. </description>
+          <rationale> If your organization has a secure area for talking about
+confidential information, you should be educated about the risks of bringing
+your iOS device into those areas. The following policies may be implemented for
+device security in secure areas: <ul><li>Leave iOS devices outside conference
+rooms. </li><li>Applications that record audio or video must be removed or
+their use restricted. </li><li>Ensure the camera on the back of the iOS device
+is blocked (e.g. opaque tape) to prevent photo or video recording. </li><li>Ensure that all iOS devices, if present, are in airplane mode with Wi-Fi
+turned off. </li></ul> </rationale>
+        </Group>
+      </Group>
+      <Group id="do_not_jailbreak_or_unlock_your_ios_device">
+        <title>Do Not Jailbreak or Unlock Your iOS Device</title>
+        <description> Jailbreaking is a term that describes the process of modifying
+the iOS device&#x2019;s operating system, often with the goal of running unsigned code
+or performing unsupported customizations to the operating system. Unlocking
+allows users to operate an iOS device on a cellular network it is not
+authorized to connect to. Unlocking an iOS device requires a jailbroken iOS
+device first. </description>
+        <warning><b>Do not jailbreak or unlock your iOS device.</b> Doing so makes it
+much easier for attackers to introduce malicious code onto the device.
+</warning>
+        <rationale>Jailbreaking significantly increases the iOS device&#x2019;s
+susceptibility to compromise. It disables the enforcement of code signatures, a
+critical security feature. This enables access to a wide range of software with
+little accountability and minimal vetting. Jailbreaking tools also typically
+install and activates services that make the device easier to remotely access,
+such as SSH. </rationale>
+      </Group>
+      <Group id="install_software_updates_when_available">
+        <title>Install Software Updates When Available</title>
+        <description> Install software updates as quickly as possible. Updates can be
+applied over-the-air, and are indicated by a red circle on the "Settings" app.
+Apply by following <b>Settings &gt; General &gt; Software Update</b>.
+</description>
+        <rationale> Software updates for iOS devices can contain fixes for security
+vulnerabilities. As these vulnerabilities often become public knowledge when
+the updates are released, installing updates as soon as they are available is
+strongly recommended. Supported 3rd party software should not be broken by
+updates. Prior to iOS 5, applying iOS updates always required the use of
+iTunes. Migrating from iOS 5 to iOS 6 also requires the use of iTunes.
+</rationale>
+      </Group>
+      <Group id="connect_only_to_trusted_networks">
+        <title>Connect Only to Trusted Networks</title>
+        <description> Do not connect your iOS device to untrusted wireless networks.
+</description>
+        <rationale> Connections to untrusted WiFi networks introduce some risks.
+Attacks on the iOS device, or eavesdropping on the data it transmits, can occur
+due to use of such networks. Because the user controls the WiFi settings, he or
+she must understand the risks associated with untrusted wireless networks and
+behave responsibly. Some organizations have policies that forbid connection to
+non-enterprise controlled networks. Other organizations forbid or prevent the
+use of personal devices on enterprise networks. </rationale>
+      </Group>
+      <Group id="email_accounts">
+        <title>Email Accounts</title>
+        <Group id="consider_risks_of_using_personal_email_accounts">
+          <title>Consider Risks of Using Personal Email Accounts</title>
+          <description> Do not add personal email accounts to your iOS device, unless you
+are comfortable with (or approved for) the additional risk. </description>
+          <rationale> Adding personal email accounts implies that personal, non-company
+data will be transferred to and stored on the device. This likely violates
+organizational policy with regard to use of company resources for personal use,
+but it also increases risk. It increases the risk of your personal information
+being compromised as a result of an attack against the device, and also
+increases the risks of company information being compromised as a result of an
+attack carried out against your personal email account. See the next section
+for more information about phishing attacks and the motivation for segregating
+email accounts between different systems. </rationale>
+        </Group>
+        <Group id="be_aware_of_phishing">
+          <title>Be Aware of Phishing</title>
+          <description> Be aware of phishing attempts, including receiving mobile
+profiles from attackers. </description>
+          <rationale> Phishing is a term referring to a fraudulent communication (usually
+email) pretending to be from a reputable source asking for personal, financial
+or company information. Adding personal email accounts to your iOS device
+greatly increases your availability to receive phishing emails, which may
+accidentally release important information about yourself or your organization.
+By removing personal email accounts from the device, you are protecting your
+organization from divulging information through your device to these malicious
+actors. </rationale>
+        </Group>
+      </Group>
+      <Group id="disable_bluetooth_if_practical">
+        <title>Disable Bluetooth if Practical</title>
+        <description> Disable Bluetooth communication if not necessary. </description>
+        <rationale> Disabling Bluetooth reduces the possible attack surface for
+exploitation, although such vulnerabilities are rare and the iOS over-the-air
+update process enables rapid patching upon any public disclosure. Bluetooth
+also permits wireless device discovery and can be used to reveal a limited
+amount of information from the device. If practical, it is safest to keep
+Bluetooth disabled. The Bluetooth profiles available on iOS devices are
+documented at <b>http://support.apple.com/kb/HT3647</b>.
+</rationale>
+      </Group>
+      <Group id="recharge_device_only_through_approved_methods">
+        <title>Recharge Device Only Through Approved Methods</title>
+        <description> Recharge your device by either connecting to an
+organization-approved system or by using the AC power adapter you received when
+you were issued your device. </description>
+        <rationale> Connecting your iOS device to unknown systems exposes the device to
+unnecessary risks, including the loss of personal or company information.
+Syncing only with trusted systems also helps maintain the integrity of your iOS
+device. </rationale>
+      </Group>
+      <Group id="do_not_use_unapproved_peripherals_on_your_ios_device">
+        <title>Do Not Use Unapproved Peripherals on Your iOS Device</title>
+        <description> Many different types of iOS device accessories are available for
+use by consumers. Some of these devices allow access to a keyboard, magnetic
+card reader, or USB flash drive reader.
+Users should only use accessories approved for use by the enterprise.
+</description>
+        <rationale> Due to the physical access nature of these accessories, security
+risks may be present when attached to an iOS device. 
+</rationale>
+      </Group>
+    </Group>
+  </Group>
+</Benchmark>
